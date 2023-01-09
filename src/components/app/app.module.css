@@ -1,0 +1,24 @@
+.mainHeader {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 40px;
+    color: #F2F2F3;
+}
+
+.mainContent {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.sectionsWrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.sectionsWrap>section {
+    width: 50%;
+}
