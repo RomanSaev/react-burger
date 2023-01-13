@@ -2,6 +2,7 @@ import react from 'react'
 import styles from './constructor-item-fixed.module.css'
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types';
+import { ingredientShapePropType } from '../../prop-types';
 
 const ConstructorItemFixed = ({ingredientData, type}) => {
     const namePostFix = type === 'top' ? '(верх)' : '(низ)';
@@ -19,7 +20,7 @@ const ConstructorItemFixed = ({ingredientData, type}) => {
 }
 
 ConstructorItemFixed.propTypes = {
-    ingredientData: PropTypes.object.isRequired,
+    ingredientData: ingredientShapePropType.isRequired,
     type: PropTypes.string
 }
 

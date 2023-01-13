@@ -38,9 +38,9 @@ const BurgerConstructor = () => {
         <section className={'pl-4'}>
             <ConstructorItemFixed ingredientData={fixedIngredient} type='top'/>
             <div className={`${styles.constructorList} mt-4 mb-4 pr-2`}>
-                {selectedIngredientArr.map(el => {
+                {selectedIngredientArr.map((el, index) => {
                     return <ConstructorItem
-                        key={(new Date).getTime()}
+                        key={index}
                         ingredientData={el}
                     />
                 })}

@@ -2,6 +2,7 @@ import react from 'react'
 import styles from './burger-ingredient.module.css'
 import PropTypes from 'prop-types';
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
+import { ingredientShapePropType } from '../../prop-types';
 
 const BurgerIngredient = ({ingredientData, selectedCount}) => {
     return (
@@ -23,7 +24,7 @@ const BurgerIngredient = ({ingredientData, selectedCount}) => {
 }
 
 BurgerIngredient.propTypes = {
-    ingredientData: PropTypes.object.isRequired,
+    ingredientData: ingredientShapePropType.isRequired,
     selectedCount: PropTypes.number
 }
 
