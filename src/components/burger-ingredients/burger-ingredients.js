@@ -1,15 +1,19 @@
-import react from 'react'
+import react, { useState } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 import { ingredientShapePropType } from '../../prop-types';
+import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
 
 const BurgerIngredients = ({data}) => {
     const [current, setCurrent] = react.useState('bun')
     const bunData = data.filter(el => el.type === 'bun')
     const sauceData = data.filter(el => el.type === 'sauce')
     const mainData = data.filter(el => el.type === 'main')
+
+    const [isIngrDetailModalShowing, setIngrDetailModalShowing] = useState(false)
+    const [selectedIngredient, setSelectedIngredient] = useState(null)
 
     const ingredientsByCategory = []
     bunData.length && ingredientsByCategory.push({
@@ -27,6 +31,11 @@ const BurgerIngredients = ({data}) => {
 
     return (
         <section>
+            {isIngrDetailModalShowing && 
+                <IngredientDetailModal
+                    closeModal={setIngrDetailModalShowing}
+                    ingredient={selectedIngredient}
+                />}
             <div style={{ display: 'flex' }}>
                 <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
                     Булки
@@ -48,6 +57,8 @@ const BurgerIngredients = ({data}) => {
                                     key={ingredient._id} 
                                     ingredientData={ingredient}
                                     selectedCount={2}
+                                    setSelected={setSelectedIngredient}
+                                    openModal={setIngrDetailModalShowing}
                                 />
                             })}
                         </div>
