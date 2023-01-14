@@ -1,0 +1,27 @@
+.header {
+    background: #1C1C21;
+    box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+}
+
+.header_inner{
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: left;
+}
+
+.nav {
+    display:flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.logoWrap {
+    place-self: center;
+}
+
+.rightNav {
+    place-self: end;
+}

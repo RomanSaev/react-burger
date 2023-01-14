@@ -1,0 +1,39 @@
+.categoryItemsWrap {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.categoryName {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #F2F2F3;
+}
+
+.ingredientsBox {
+    max-height: 716px;
+    overflow-y: scroll;
+}
+
+.ingredientsBox::-webkit-scrollbar {
+  width: 8px;
+}
+  
+.ingredientsBox::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+  
+.ingredientsBox::-webkit-scrollbar-thumb {
+  background: #8585AD;
+  border: 3px solid #8585AD;
+}
+
+.ingredientsBox::-webkit-scrollbar-thumb:hover {
+  border: 3px solid #9696c1
+}
+
+.ingredientsBox > div:first-child .categoryName{
+    margin-top: 0;
+}
+

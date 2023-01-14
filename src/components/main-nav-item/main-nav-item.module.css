@@ -1,0 +1,16 @@
+.nav_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8585AD;
+    text-decoration: none;
+}
+.active {
+    color: #F2F2F3;
+}
+.text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}

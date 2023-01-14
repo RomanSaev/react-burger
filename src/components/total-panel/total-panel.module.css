@@ -1,0 +1,21 @@
+.totalWrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 40px;
+}
+
+.priceWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.priceWrap>span {
+    font-family: 'Iceland', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 36px;
+    color: #F2F2F3;
+}

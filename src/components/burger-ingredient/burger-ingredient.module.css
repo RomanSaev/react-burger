@@ -1,0 +1,43 @@
+.ingredientCard {
+    position: relative;
+    max-width: 272px;
+}
+
+.ingredientCard:nth-child(1),
+.ingredientCard:nth-child(2) {
+    margin-top:24px;
+}
+
+.ingredientCard:nth-child(odd) {
+    margin-right:16px;
+}
+
+.img {
+    display: inline-block;
+    width: 240px;
+    height: 120px;
+}
+
+.priceWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.priceWrap>span {
+    font-family: 'Iceland', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    color: #F2F2F3;
+}
+
+.nameWrap {
+    min-height: 48px;
+    text-align: center;
+    padding:0 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+}
