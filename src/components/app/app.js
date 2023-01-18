@@ -3,7 +3,7 @@ import styles from './app.module.css'
 import AppHeader from '../app-header/app-header'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
-import {ingredientsApiUrl} from '../../constants'
+import { getIngredients } from '../../utils/react-burger-api'
 
 const App = () => {
     const [fetchState, setFetchState] = useState({
@@ -19,8 +19,7 @@ const App = () => {
     async function loadIngredientsData() {
         try {
             setFetchState({ data: [], isLoading: true, error: false })
-            const fetchPromise = await fetch(ingredientsApiUrl)
-            const fetchData = await fetchPromise.json()
+            const fetchData = await getIngredients();
             if (fetchData?.success && fetchData.data.length > 0) {
                 setFetchState({ data: fetchData.data, isLoading: false, error: false })
             } else {
