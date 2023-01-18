@@ -12,5 +12,10 @@ export const ingredientShapePropType = PropTypes.shape({
     image: PropTypes.string.isRequired,
     image_mobile: PropTypes.string.isRequired,
     image_large: PropTypes.string.isRequired,
-    __v: PropTypes.string,
+    __v: PropTypes.number,
   });
+
+export const orderShapePropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  status: PropTypes.number.isRequired
+})
