@@ -19,3 +19,17 @@
     line-height: 36px;
     color: #F2F2F3;
 }
+
+.makeOrderLoadingInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.makeOrderLoadingError {
+    composes: makeOrderLoadingInfo;
+    color: #ad507b;
+}

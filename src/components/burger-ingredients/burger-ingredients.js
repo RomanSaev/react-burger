@@ -6,7 +6,7 @@ import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 import { ingredientShapePropType } from '../../prop-types';
 import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
 
-const BurgerIngredients = ({data}) => {
+const BurgerIngredients = ({data, selectedCounts}) => {
     const [current, setCurrent] = react.useState('bun')
     const bunData = data.filter(el => el.type === 'bun')
     const sauceData = data.filter(el => el.type === 'sauce')
@@ -53,10 +53,12 @@ const BurgerIngredients = ({data}) => {
                         <h3 className={`${styles.categoryName} mt-10`}>{categoryData.title}</h3>
                         <div className={`${styles.categoryItemsWrap} pl-4`}>
                             {categoryData.ingredients.map(ingredient => {
+                                const ingredientCount = selectedCounts[`id${ingredient._id}`];
+                                const count = typeof ingredientCount !== 'undefined' && ingredientCount > 0 ? ingredientCount : 0;
                                 return <BurgerIngredient 
                                     key={ingredient._id} 
                                     ingredientData={ingredient}
-                                    selectedCount={2}
+                                    selectedCount={count}
                                     setSelected={setSelectedIngredient}
                                     openModal={setIngrDetailModalShowing}
                                 />
@@ -70,6 +72,7 @@ const BurgerIngredients = ({data}) => {
 }
 BurgerIngredients.propTypes = {
     data: PropTypes.arrayOf(ingredientShapePropType).isRequired,
+    selectedCounts: PropTypes.objectOf(PropTypes.number)
 }
 
 export default BurgerIngredients
