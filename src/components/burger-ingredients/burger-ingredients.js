@@ -5,8 +5,11 @@ import PropTypes from 'prop-types';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 import { ingredientShapePropType } from '../../prop-types';
 import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
+import { BurgerIngredientsContext } from '../../contexts/burger-ingredients-context';
 
-const BurgerIngredients = ({data, selectedCounts}) => {
+const BurgerIngredients = () => {
+    const {data, selectedCounts} = react.useContext(BurgerIngredientsContext);
+
     const [current, setCurrent] = react.useState('bun')
     const bunData = data.filter(el => el.type === 'bun')
     const sauceData = data.filter(el => el.type === 'sauce')
@@ -69,10 +72,6 @@ const BurgerIngredients = ({data, selectedCounts}) => {
             </div>
         </section>
     )
-}
-BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientShapePropType).isRequired,
-    selectedCounts: PropTypes.objectOf(PropTypes.number)
 }
 
 export default BurgerIngredients
