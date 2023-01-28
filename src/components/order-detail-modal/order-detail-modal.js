@@ -1,28 +1,22 @@
-import react from 'react'
+import react, { useContext } from 'react'
 import styles from './order-detail-modal.module.css'
-import ReactDOM from 'react-dom';
-import ModalOverlay from '../modal-overlay/modal-overlay';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import PropTypes from 'prop-types';
-import { orderShapePropType } from '../../prop-types';
+import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
 
-const modalRoot = document.getElementById('modal');
+const OrderDetailModal = ({ closeModal }) => {
+    const {orderRequest} = useContext(BurgerConstructorContext);
 
-const OrderDetailModal = ({ closeModal, order }) => {
-    return ReactDOM.createPortal((
-        <ModalOverlay closeModal={closeModal}>
-            <Modal closeModal={closeModal}>
-                <OrderDetails order={order}/>
-            </Modal>
-        </ModalOverlay>
-        ),
-        modalRoot)
+    return (
+        <Modal closeModal={closeModal}>
+            <OrderDetails order={orderRequest.data}/>
+        </Modal>
+    );
 }
 
 OrderDetailModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
-    order: orderShapePropType,
 }
 
 export default OrderDetailModal

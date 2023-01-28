@@ -3,11 +3,24 @@ import styles from './app.module.css'
 import AppHeader from '../app-header/app-header'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
-import {ingredientsApiUrl} from '../../constants'
+import { getIngredients } from '../../utils/react-burger-api'
+import { BurgerConstructorContext } from '../../contexts/burger-constructor-context'
+import { BurgerIngredientsContext } from '../../contexts/burger-ingredients-context'
 
 const App = () => {
-    const [fetchState, setFetchState] = useState({
+    const [ingredietnsRequest, setIngredietnsRequest] = useState({
         data: [],
+        isLoading: false,
+        error: false,
+    })
+
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+    const [selectedCounts, setSelectedCounts] = useState({ //объект с количествами выбранных ингредиентов (для вывода каунтеров в BurgerIngredients)
+        id60d3b41abdacab0026a733c6: 2,
+    });
+
+    const [orderRequest, setOrderRequest] = useState({
+        data: null,
         isLoading: false,
         error: false,
     })
@@ -18,17 +31,18 @@ const App = () => {
 
     async function loadIngredientsData() {
         try {
-            setFetchState({ data: [], isLoading: true, error: false })
-            const fetchPromise = await fetch(ingredientsApiUrl)
-            const fetchData = await fetchPromise.json()
+            setIngredietnsRequest({ data: [], isLoading: true, error: false })
+            const fetchData = await getIngredients();
             if (fetchData?.success && fetchData.data.length > 0) {
-                setFetchState({ data: fetchData.data, isLoading: false, error: false })
+                setIngredietnsRequest({ data: fetchData.data, isLoading: false, error: false })
+
+                setSelectedIngredients([...fetchData.data.slice(0,4)]); //тут временно добавляем ингредиенты в бургер конструктор
             } else {
-                setFetchState({ data: [], isLoading: false, error: true })
+                setIngredietnsRequest({ data: [], isLoading: false, error: true })
             }
         }
         catch(err) {
-            setFetchState({ data: [], isLoading: false, error: true })
+            setIngredietnsRequest({ data: [], isLoading: false, error: true })
         }
     }
 
@@ -36,7 +50,7 @@ const App = () => {
         <div className='app'>
             <AppHeader/>
 
-            {fetchState.isLoading && (
+            {ingredietnsRequest.isLoading && (
                 <div className={styles.serviceInfoWrap}>
                     <div className={styles.serviceInfo}>
                         <span>Загружаем данные...</span>
@@ -44,7 +58,7 @@ const App = () => {
                 </div>
             )}
 
-            {fetchState.error && (
+            {ingredietnsRequest.error && (
                 <div className={styles.serviceInfoWrap}>
                     <div className={styles.serviceInfo}>
                         <span>Сервис в данный момент недоступен :(</span>
@@ -53,12 +67,31 @@ const App = () => {
                 </div>
             )}
 
-            {fetchState.data.length > 0 && (
+            {ingredietnsRequest.data.length > 0 && (
                 <main className={styles.mainContent}>
                     <h1 className={`${styles.mainHeader} mt-10 mb-5`}>Соберите бургер</h1>
                     <div className={styles.sectionsWrap}>
-                        <BurgerIngredients data={fetchState.data}/>
-                        <BurgerConstructor data={fetchState.data}/>
+                        <BurgerIngredientsContext.Provider
+                            value={{
+                                data: ingredietnsRequest.data,
+                                selectedCounts,
+                            }}
+                        >
+                            <BurgerIngredients />
+                        </BurgerIngredientsContext.Provider>
+                        
+                        <BurgerConstructorContext.Provider
+                            value={{
+                                selectedIngredients, 
+                                setSelectedIngredients,
+                                selectedCounts,
+                                setSelectedCounts,
+                                orderRequest,
+                                setOrderRequest,
+                            }}
+                        >
+                            <BurgerConstructor />
+                        </BurgerConstructorContext.Provider>
                     </div>
                 </main>   
             )}

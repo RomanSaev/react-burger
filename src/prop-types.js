@@ -16,6 +16,5 @@ export const ingredientShapePropType = PropTypes.shape({
   });
 
 export const orderShapePropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  status: PropTypes.number.isRequired
+  number: PropTypes.number.isRequired,
 })

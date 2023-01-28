@@ -1,1 +1,1 @@
-export const ingredientsApiUrl = 'https://norma.nomoreparties.space/api/ingredients';
+export const burgerApiUrl = 'https://norma.nomoreparties.space/api';
