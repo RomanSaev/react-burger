@@ -5,6 +5,8 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchIngredients } from '../../store/actions/ingredients'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const App = () => {
     const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(state => state.ingredients);
@@ -39,8 +41,10 @@ const App = () => {
                 <main className={styles.mainContent}>
                     <h1 className={`${styles.mainHeader} mt-10 mb-5`}>Соберите бургер</h1>
                     <div className={styles.sectionsWrap}>
-                        <BurgerIngredients />
-                        <BurgerConstructor />
+                        <DndProvider backend={HTML5Backend}>
+                            <BurgerIngredients />
+                            <BurgerConstructor />
+                        </DndProvider>
                     </div>
                 </main>   
             )}

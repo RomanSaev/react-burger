@@ -1,4 +1,4 @@
-import react from 'react'
+import react, { useState } from 'react'
 import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
@@ -7,11 +7,30 @@ import OrderDetailModal from '../order-detail-modal/order-detail-modal'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
 import { useDispatch, useSelector } from 'react-redux'
 import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
+import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
+import { useDrop } from 'react-dnd'
 
 const BurgerConstructor = () => {
     const { selectedIngredients } = useSelector(state => state.burgerConstructor);
     const { order, isOrderDetailModalShowing } = useSelector(state => state.order);
     const dispatch = useDispatch();
+
+    const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState('');//храним подсветку блоков пустого бургера в локальном состоянии
+
+    const [{}, dropTarget] = useDrop({
+        accept: 'ingredient',
+        drop(item) {
+            dispatch({ type: ADD_CONSTRUCTOR_ITEM, payload: item})
+            setEmptyBurgerHoverType('');
+        },
+        hover(item) {
+            handleDragHover(item)
+        },
+    })
+
+    const handleDragHover = (item) => {
+        setEmptyBurgerHoverType(item.type)
+    }
 
     const closeOrderDetailModal = () => {
        dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
@@ -21,7 +40,7 @@ const BurgerConstructor = () => {
     const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
 
     return (
-        <section className={'pl-4'}>
+        <section className={'pl-4'} ref={dropTarget}>
             {isOrderDetailModalShowing && 
                 <OrderDetailModal
                     order={order}
@@ -33,6 +52,7 @@ const BurgerConstructor = () => {
                 : <ConstructorItemEmpty
                     type='top'
                     text='Выберите булку'
+                    cute={emptyBurgerHoverType === 'bun'}
                 />
             }
             
@@ -47,6 +67,7 @@ const BurgerConstructor = () => {
                     : <ConstructorItemEmpty
                         type='list'
                         text='Выберите начинку'
+                        cute={emptyBurgerHoverType.length > 0 && emptyBurgerHoverType !== 'bun'}
                     />
                 }
             </div>
@@ -56,6 +77,7 @@ const BurgerConstructor = () => {
                 : <ConstructorItemEmpty
                     type='bottom'
                     text='Выберите булку'
+                    cute={emptyBurgerHoverType === 'bun'}
                 />
             }
 
