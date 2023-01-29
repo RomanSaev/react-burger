@@ -4,9 +4,6 @@ const initialState = {
     ingredients: [],
     ingredientsRequest: false,
     ingredientsFailed: false,
-
-    //TODO
-    //browsedCategory: 'bun', 
 }
 
 export const ingredientsReducer = (state = initialState, action) => {
