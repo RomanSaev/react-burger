@@ -2,11 +2,11 @@ import react from 'react'
 import styles from './modal-overlay.module.css'
 import PropTypes from 'prop-types';
 
-const ModalOverlay = (props) => {
+const ModalOverlay = ({ closeModal }) => {
     return (
         <div 
             className={styles.overlay}
-            onClick={() => props.closeModal(false)}
+            onClick={() => closeModal()}
         ></div>
     )
 }

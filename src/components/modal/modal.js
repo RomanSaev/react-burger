@@ -12,7 +12,7 @@ const Modal = (props) => {
     useEffect(() => {
         const keyCloseHandler = (e) => {
             if (e.key === 'Escape') {
-                props.closeModal(false);
+                props.closeModal();
             }
         }
 
@@ -32,7 +32,7 @@ const Modal = (props) => {
                             {props.title}
                         </div>
                         <div className={styles.closeIcon}>
-                            <CloseIcon type="primary" onClick={() => props.closeModal(false)}/>
+                            <CloseIcon type="primary" onClick={() => props.closeModal()}/>
                         </div>
                     </div>
                     <div className={styles.modalBody}>

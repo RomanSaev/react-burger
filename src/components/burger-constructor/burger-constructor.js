@@ -1,15 +1,21 @@
-import react, { useContext, useState } from 'react'
+import react from 'react'
 import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
 import TotalPanel from '../total-panel/total-panel'
 import OrderDetailModal from '../order-detail-modal/order-detail-modal'
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
+import { useDispatch, useSelector } from 'react-redux'
+import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
 
 const BurgerConstructor = () => {
-    const { selectedIngredients } = useContext(BurgerConstructorContext);
-    const [isOrderDetailModalShowing, setOrderDetailModalShowing] = useState(false)
+    const { selectedIngredients } = useSelector(state => state.burgerConstructor);
+    const { order, isOrderDetailModalShowing } = useSelector(state => state.order);
+    const dispatch = useDispatch();
+
+    const closeOrderDetailModal = () => {
+       dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
+    }
 
     const bunIngredient = selectedIngredients.find(el => el.type === 'bun')
     const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
@@ -17,8 +23,9 @@ const BurgerConstructor = () => {
     return (
         <section className={'pl-4'}>
             {isOrderDetailModalShowing && 
-                <OrderDetailModal 
-                    closeModal={setOrderDetailModalShowing}
+                <OrderDetailModal
+                    order={order}
+                    closeModal={closeOrderDetailModal}
                 />}
 
             {bunIngredient
@@ -31,9 +38,9 @@ const BurgerConstructor = () => {
             
             <div className={`${styles.constructorList} mt-4 mb-4 pr-2`}>
                 {selectedFillingIngredients.length > 0
-                    ? selectedFillingIngredients.map((el, index) => {
+                    ? selectedFillingIngredients.map((el) => {
                         return <ConstructorItem
-                            key={index}
+                            key={el.uuid}
                             ingredientData={el}
                         />
                     })
@@ -52,9 +59,7 @@ const BurgerConstructor = () => {
                 />
             }
 
-            <TotalPanel 
-                openOrderDetailModal={setOrderDetailModalShowing}
-            />
+            <TotalPanel />
         </section>
     )
 }

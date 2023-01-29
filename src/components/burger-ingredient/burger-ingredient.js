@@ -1,13 +1,17 @@
-import react, { useState } from 'react'
+import react from 'react'
 import styles from './burger-ingredient.module.css'
 import PropTypes from 'prop-types';
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { ingredientShapePropType } from '../../prop-types';
+import { useDispatch } from 'react-redux';
 
-const BurgerIngredient = ({ingredientData, selectedCount, setSelected, openModal}) => {
+const BurgerIngredient = ({ ingredientData, selectedCount, openModal }) => {
+    const dispatch = useDispatch();
     const handleClick = () => {
-        setSelected(ingredientData);
-        openModal(true)
+        openModal(ingredientData)
+
+        //FOR TEST
+        dispatch({ type: 'ADD_CONSTRUCTOR_ITEM', payload: ingredientData})
     }
 
     return (
@@ -31,7 +35,6 @@ const BurgerIngredient = ({ingredientData, selectedCount, setSelected, openModal
 BurgerIngredient.propTypes = {
     ingredientData: ingredientShapePropType.isRequired,
     selectedCount: PropTypes.number,
-    setSelected: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
 }
 

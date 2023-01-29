@@ -1,22 +1,25 @@
-import react, { useState } from 'react'
+import react from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import { ingredientShapePropType } from '../../prop-types';
 import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
-import { BurgerIngredientsContext } from '../../contexts/burger-ingredients-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { HIDE_INGREDIENT_DETAIL_MODAL, SHOW_INGREDIENT_DETAIL_MODAL } from '../../store/actions/ingredient-detail';
 
 const BurgerIngredients = () => {
-    const {data, selectedCounts} = react.useContext(BurgerIngredientsContext);
+    const { ingredients } = useSelector(state => state.ingredients);
+    const { browsedCategory } = useSelector(state => state.ingredients);
+    const { selectedCounts } = useSelector(state => state.burgerConstructor);
+    const { selectedIngredient, isIngrDetailModalShowing } = useSelector(state => state.ingredientDetail)
+    const dispatch = useDispatch();
 
-    const [current, setCurrent] = react.useState('bun')
-    const bunData = data.filter(el => el.type === 'bun')
-    const sauceData = data.filter(el => el.type === 'sauce')
-    const mainData = data.filter(el => el.type === 'main')
+    const setBrowsedCategory = () => {
+        //TODO
+    }
 
-    const [isIngrDetailModalShowing, setIngrDetailModalShowing] = useState(false)
-    const [selectedIngredient, setSelectedIngredient] = useState(null)
+    const bunData = ingredients.filter(el => el.type === 'bun')
+    const sauceData = ingredients.filter(el => el.type === 'sauce')
+    const mainData = ingredients.filter(el => el.type === 'main')
 
     const ingredientsByCategory = []
     bunData.length && ingredientsByCategory.push({
@@ -32,21 +35,29 @@ const BurgerIngredients = () => {
         ingredients: mainData
     })
 
+    const closeIngredientDetailModal = () => {
+        dispatch({ type: HIDE_INGREDIENT_DETAIL_MODAL });
+    }
+
+    const openIngredientDetailModal = (ingredient) => {
+        dispatch({ type: SHOW_INGREDIENT_DETAIL_MODAL, payload: ingredient });
+    }
+
     return (
         <section>
             {isIngrDetailModalShowing && 
                 <IngredientDetailModal
-                    closeModal={setIngrDetailModalShowing}
+                    closeModal={closeIngredientDetailModal}
                     ingredient={selectedIngredient}
                 />}
             <div style={{ display: 'flex' }}>
-                <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
+                <Tab value='bun' active={browsedCategory === 'bun'} onClick={setBrowsedCategory}>
                     Булки
                 </Tab>
-                <Tab value='sauce' active={current === 'sauce'} onClick={setCurrent}>
+                <Tab value='sauce' active={browsedCategory === 'sauce'} onClick={setBrowsedCategory}>
                     Соусы
                 </Tab>
-                <Tab value='main' active={current === 'main'} onClick={setCurrent}>
+                <Tab value='main' active={browsedCategory === 'main'} onClick={setBrowsedCategory}>
                     Начинки
                 </Tab>
             </div>
@@ -62,8 +73,7 @@ const BurgerIngredients = () => {
                                     key={ingredient._id} 
                                     ingredientData={ingredient}
                                     selectedCount={count}
-                                    setSelected={setSelectedIngredient}
-                                    openModal={setIngrDetailModalShowing}
+                                    openModal={openIngredientDetailModal}
                                 />
                             })}
                         </div>

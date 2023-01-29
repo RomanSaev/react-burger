@@ -1,22 +1,21 @@
-import react, { useContext } from 'react'
+import react from 'react'
 import styles from './order-detail-modal.module.css'
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import PropTypes from 'prop-types';
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context';
+import { orderShapePropType } from '../../prop-types';
 
-const OrderDetailModal = ({ closeModal }) => {
-    const {orderRequest} = useContext(BurgerConstructorContext);
-
+const OrderDetailModal = ({ order, closeModal }) => {
     return (
         <Modal closeModal={closeModal}>
-            <OrderDetails order={orderRequest.data}/>
+            <OrderDetails order={order}/>
         </Modal>
     );
 }
 
 OrderDetailModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
+    order: orderShapePropType,
 }
 
 export default OrderDetailModal
