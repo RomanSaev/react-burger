@@ -1,4 +1,4 @@
-import react, { useEffect } from 'react'
+import react, { useEffect, useRef } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
@@ -14,10 +14,15 @@ const BurgerIngredients = () => {
     const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(state => state.ingredientDetail)
     const dispatch = useDispatch();
 
-    const useInViewParams = { threshold: 0.2 };//для более плавной смены активной просматриваемой категории
+    const useInViewParams = { threshold: 0.2 }; //для более плавной смены активной просматриваемой категории
     const [ ref1, inView1, entry1 ] = useInView(useInViewParams);
     const [ ref2, inView2, entry2 ] = useInView(useInViewParams);
     const [ ref3, inView3, entry3 ] = useInView(useInViewParams);
+
+    const refBun = useRef(); //реф на заголовок "Булки"
+    const refSauce = useRef(); //реф на заголовок "Соусы"
+    const refMain = useRef(); //реф на заголовок "Начинки"
+    const refIngredientsBox = useRef(); //реф на скроллящийся родитель вывода ингредиентов
 
     useEffect( () => {
         //такая конструкция нужна для того, чтобы активная категория была всегда только одна (ведь могут быть true несколько inView состояний).
@@ -25,13 +30,15 @@ const BurgerIngredients = () => {
             dispatch({ type: SET_BROWSED_CATEGORY, payload: 'bun'})
         } else if(inView2){
             dispatch({ type: SET_BROWSED_CATEGORY, payload: 'sauce'})
-        } else { 
+        } else if(inView3){ 
             dispatch({ type: SET_BROWSED_CATEGORY, payload: 'main'})
         }
     },[inView1, inView2, inView3])
 
-    const setBrowsedCategory = () => {
-        //TODO
+    const onTabClick = (ref) => {
+        if (ref.current) {
+            refIngredientsBox.current.scrollTop = ref.current.offsetTop; //проскролливаем контейнер к заголовку категории
+        }
     }
 
     const bunData = ingredients.filter(el => el.type === 'bun')
@@ -42,17 +49,20 @@ const BurgerIngredients = () => {
     bunData.length && ingredientsByCategory.push({
         title: 'Булки',
         ingredients: bunData,
-        refObj: ref1,
+        refBox: ref1,
+        refHeader: refBun,
     })
     sauceData.length && ingredientsByCategory.push({
         title: 'Соусы',
         ingredients: sauceData,
-        refObj: ref2,
+        refBox: ref2,
+        refHeader: refSauce,
     })
     mainData.length && ingredientsByCategory.push({
         title: 'Начинки',
         ingredients: mainData,
-        refObj: ref3,
+        refBox: ref3,
+        refHeader: refMain,
     })
 
     const closeIngredientDetailModal = () => {
@@ -71,21 +81,21 @@ const BurgerIngredients = () => {
                     ingredient={selectedIngredient}
                 />}
             <div style={{ display: 'flex' }}>
-                <Tab value='bun' active={browsedCategory === 'bun'} onClick={setBrowsedCategory}>
+                <Tab value='bun' active={browsedCategory === 'bun'} onClick={() => onTabClick(refBun)}>
                     Булки
                 </Tab>
-                <Tab value='sauce' active={browsedCategory === 'sauce'} onClick={setBrowsedCategory}>
+                <Tab value='sauce' active={browsedCategory === 'sauce'} onClick={() => onTabClick(refSauce)}>
                     Соусы
                 </Tab>
-                <Tab value='main' active={browsedCategory === 'main'} onClick={setBrowsedCategory}>
+                <Tab value='main' active={browsedCategory === 'main'} onClick={() => onTabClick(refMain)}>
                     Начинки
                 </Tab>
             </div>
-            <div className={`${styles.ingredientsBox} pb-8 mt-10`}>
+            <div ref={refIngredientsBox} className={`${styles.ingredientsBox} pb-8 mt-10`}>
                 {ingredientsByCategory.map((categoryData,index) => {
-                    return <div key={index}>
-                        <h3 className={`${styles.categoryName} mt-10`}>{categoryData.title}</h3>
-                        <div ref={categoryData.refObj} className={`${styles.categoryItemsWrap} pl-4`}>
+                    return <div key={index} ref={categoryData.refBox}>
+                        <h3 ref={categoryData.refHeader} className={`${styles.categoryName} mt-10`}>{categoryData.title}</h3>
+                        <div className={`${styles.categoryItemsWrap} pl-4`}>
                             {categoryData.ingredients.map(ingredient => {
                                 const ingredientCount = selectedCounts[`id${ingredient._id}`];
                                 const count = typeof ingredientCount !== 'undefined' && ingredientCount > 0 ? ingredientCount : 0;
