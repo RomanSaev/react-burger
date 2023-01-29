@@ -8,7 +8,6 @@ export const SHOW_ORDER_DETAIL_MODAL = 'SHOW_ORDER_DETAIL_MODAL';
 export const HIDE_ORDER_DETAIL_MODAL = 'HIDE_ORDER_DETAIL_MODAL';
 
 export const makeOrderRequest = (selectedIngredients) => {
-    debugger;
     return async function (dispatch) {
         const ingredientIds = selectedIngredients.map(el => el._id);
         try {

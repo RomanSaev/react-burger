@@ -1,9 +1,9 @@
-import { ADD_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from "../actions/burger-constructor";
+import { ADD_CONSTRUCTOR_ITEM, MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from "../actions/burger-constructor";
 import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     selectedIngredients: [],
-    selectedCounts: {}, //???? объект с количествами выбранных ингредиентов (для вывода каунтеров в BurgerIngredients)
+    selectedCounts: {}, //объект с количествами выбранных ингредиентов (для вывода каунтеров в BurgerIngredients)
     totalPrice: 0
 }
 
@@ -64,7 +64,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
             }
         }
         case REMOVE_CONSTRUCTOR_ITEM: {
-            debugger;
             const ingredient = { ...action.payload };
             const newSelectedCounts = { ...state.selectedCounts };
             const ingredientCount = ingredient.type === 'bun' ? 2 : 1;
@@ -79,6 +78,22 @@ export const burgerConstructorReducer = (state = initialState, action) => {
                 selectedIngredients: newSelectedIngredients,
                 selectedCounts: newSelectedCounts,
                 totalPrice: getTotalPrice(newSelectedIngredients)
+            }
+        }
+        case MOVE_CONSTRUCTOR_ITEM: {
+            const prevSelectedIngredients = [ ...state.selectedIngredients ].filter(el => el.type !== 'bun');
+            const sortedSelectedIngredients = [ ... prevSelectedIngredients ];
+            const indexFrom = action.payload.from;
+            const indexTo = action.payload.to;
+
+            //сортируем массив с переносом перетаскиваемого элемента в списке
+            sortedSelectedIngredients.splice(indexFrom, 1)
+            sortedSelectedIngredients.splice(indexTo, 0, prevSelectedIngredients[indexFrom])
+
+            return {
+                ...state,
+                selectedCounts: { ...state.selectedCounts },
+                selectedIngredients: sortedSelectedIngredients,
             }
         }
         default:

@@ -58,10 +58,11 @@ const BurgerConstructor = () => {
             
             <div className={`${styles.constructorList} mt-4 mb-4 pr-2`}>
                 {selectedFillingIngredients.length > 0
-                    ? selectedFillingIngredients.map((el) => {
+                    ? selectedFillingIngredients.map((el, index) => {
                         return <ConstructorItem
                             key={el.uuid}
                             ingredientData={el}
+                            index={index}
                         />
                     })
                     : <ConstructorItemEmpty
