@@ -10,10 +10,11 @@ import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
 import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
 import { getTotalBurgerPrice } from '../../utils/functions-helper'
+import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
 
 const BurgerConstructor = () => {
-    const { selectedIngredients } = useSelector(state => state.burgerConstructor);
-    const { order, isOrderDetailModalShowing } = useSelector(state => state.order);
+    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { order, isOrderDetailModalShowing } = useSelector(orderSelector);
     const dispatch = useDispatch();
 
     const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState('');//храним подсветку блоков пустого бургера в локальном состоянии

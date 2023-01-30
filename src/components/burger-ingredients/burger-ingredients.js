@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { HIDE_INGREDIENT_DETAIL_MODAL, SHOW_INGREDIENT_DETAIL_MODAL } from '../../store/actions/ingredient-detail';
 import { useInView } from 'react-intersection-observer';
 import { SET_BROWSED_CATEGORY } from '../../store/actions/ingredient-detail';
+import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelector } from '../../store/selectors';
 
 const BurgerIngredients = () => {
-    const { ingredients } = useSelector(state => state.ingredients);
-    const { selectedCounts } = useSelector(state => state.burgerConstructor);
-    const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(state => state.ingredientDetail)
+    const { ingredients } = useSelector(ingredientsSelector);
+    const { selectedCounts } = useSelector(burgerConstructorSelector);
+    const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(ingredientDetailSelector)
     const dispatch = useDispatch();
 
     const useInViewParams = { threshold: 0.2 }; //для более плавной смены активной просматриваемой категории

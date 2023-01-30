@@ -4,11 +4,12 @@ import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-com
 import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
 import PropTypes from 'prop-types';
+import { burgerConstructorSelector, orderSelector } from '../../store/selectors';
 
 const TotalPanel = ({ price }) => {
 
-    const { selectedIngredients } = useSelector(state => state.burgerConstructor);
-    const { orderRequest, orderFailed } = useSelector(state => state.order)
+    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { orderRequest, orderFailed } = useSelector(orderSelector)
     const dispatch = useDispatch();
 
     const makeOrderClickHandle = () => {
