@@ -1,4 +1,4 @@
-import react, { useEffect, useRef } from 'react'
+import react, { useEffect, useMemo, useRef } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
@@ -41,9 +41,9 @@ const BurgerIngredients = () => {
         }
     }
 
-    const bunData = ingredients.filter(el => el.type === 'bun')
-    const sauceData = ingredients.filter(el => el.type === 'sauce')
-    const mainData = ingredients.filter(el => el.type === 'main')
+    const bunData = useMemo(() => ingredients.filter(el => el.type === 'bun'), [ingredients]);
+    const sauceData = useMemo(() => ingredients.filter(el => el.type === 'sauce'),  [ingredients]);
+    const mainData = useMemo(() => ingredients.filter(el => el.type === 'main'),  [ingredients]);
 
     const ingredientsByCategory = []
     bunData.length && ingredientsByCategory.push({

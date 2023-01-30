@@ -21,7 +21,12 @@ export const orderReducer = (state = initialState, action) => {
             }
         }
         case MAKE_ORDER_FAILED: {
-            return { ...state, orderRequest: false, orderFailed: true }
+            return {
+                ...state,
+                orderRequest: false,
+                orderFailed: true,
+                order: null,
+            }
         }
         case SHOW_ORDER_DETAIL_MODAL: {
             return {
