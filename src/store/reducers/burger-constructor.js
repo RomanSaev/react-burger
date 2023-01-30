@@ -4,20 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 const initialState = {
     selectedIngredients: [],
     selectedCounts: {}, //объект с количествами выбранных ингредиентов (для вывода каунтеров в BurgerIngredients)
-    totalPrice: 0
-}
-
-const getTotalPrice = (selectedItems) => {
-    let resultPrice = 0;
-    const bunIngredient = selectedItems.find(el => el.type === 'bun');
-    const selectedFillingIngredients = selectedItems.filter(el => el.type !== 'bun');
-    if (bunIngredient) {
-        resultPrice += bunIngredient.price * 2;
-        resultPrice += selectedFillingIngredients.reduce((previousValue, currentItem) => {
-            return previousValue + currentItem.price
-        }, 0)
-    }
-    return resultPrice;
 }
 
 export const burgerConstructorReducer = (state = initialState, action) => {
@@ -60,7 +46,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
                 ...state,
                 selectedIngredients: newSelectedIngredients,
                 selectedCounts: newSelectedCounts,
-                totalPrice: getTotalPrice(newSelectedIngredients)
             }
         }
         case REMOVE_CONSTRUCTOR_ITEM: {
@@ -77,18 +62,22 @@ export const burgerConstructorReducer = (state = initialState, action) => {
                 ...state,
                 selectedIngredients: newSelectedIngredients,
                 selectedCounts: newSelectedCounts,
-                totalPrice: getTotalPrice(newSelectedIngredients)
             }
         }
         case MOVE_CONSTRUCTOR_ITEM: {
-            const prevSelectedIngredients = [ ...state.selectedIngredients ].filter(el => el.type !== 'bun');
-            const sortedSelectedIngredients = [ ... prevSelectedIngredients ];
+            const prevSelectedIngredients = [ ...state.selectedIngredients ];
+            const prevSelectedFillingIngredients = prevSelectedIngredients.filter(el => el.type !== 'bun');
+            const prevSelectedBunIngredient = prevSelectedIngredients.find(el => el.type === 'bun')
+
+            const sortedSelectedIngredients = [ ... prevSelectedFillingIngredients ];
             const indexFrom = action.payload.from;
             const indexTo = action.payload.to;
 
             //сортируем массив с переносом перетаскиваемого элемента в списке
             sortedSelectedIngredients.splice(indexFrom, 1)
-            sortedSelectedIngredients.splice(indexTo, 0, prevSelectedIngredients[indexFrom])
+            sortedSelectedIngredients.splice(indexTo, 0, prevSelectedFillingIngredients[indexFrom])
+            
+            prevSelectedBunIngredient && sortedSelectedIngredients.unshift(prevSelectedBunIngredient)//добавляем булку в новый массив, если она уже была в конструкторе ингредиентов
 
             return {
                 ...state,

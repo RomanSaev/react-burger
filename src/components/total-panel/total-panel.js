@@ -3,10 +3,11 @@ import styles from './total-panel.module.css'
 import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
+import PropTypes from 'prop-types';
 
-const TotalPanel = () => {
+const TotalPanel = ({ price }) => {
 
-    const {selectedIngredients, totalPrice} = useSelector(state => state.burgerConstructor);
+    const { selectedIngredients } = useSelector(state => state.burgerConstructor);
     const { orderRequest, orderFailed } = useSelector(state => state.order)
     const dispatch = useDispatch();
 
@@ -26,8 +27,8 @@ const TotalPanel = () => {
 
             {!orderRequest && !orderFailed &&
                 <>
-                    {totalPrice > 0 && <div className={styles.priceWrap}>
-                        {<span>{totalPrice}</span>}
+                    {price > 0 && <div className={styles.priceWrap}>
+                        {<span>{price}</span>}
                         <CurrencyIcon type="primary" />
                     </div>
                     }
@@ -36,7 +37,7 @@ const TotalPanel = () => {
                         type="primary"
                         size="large"
                         onClick={makeOrderClickHandle}
-                        disabled={totalPrice === 0}
+                        disabled={price === 0}
                         >
                         Оформить заказ
                     </Button>
@@ -44,6 +45,10 @@ const TotalPanel = () => {
             }
         </div>
     )
+}
+
+TotalPanel.propTypes = {
+    price: PropTypes.number.isRequired,
 }
 
 export default TotalPanel

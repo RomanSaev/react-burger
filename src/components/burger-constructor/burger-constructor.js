@@ -1,4 +1,4 @@
-import react, { useState } from 'react'
+import react, { useMemo, useState } from 'react'
 import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
 import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
+import { getTotalBurgerPrice } from '../../utils/functions-helper'
 
 const BurgerConstructor = () => {
     const { selectedIngredients } = useSelector(state => state.burgerConstructor);
@@ -38,6 +39,10 @@ const BurgerConstructor = () => {
 
     const bunIngredient = selectedIngredients.find(el => el.type === 'bun')
     const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
+
+    const totalPrice = useMemo(()=> {
+        return getTotalBurgerPrice(selectedIngredients);
+     }, [selectedIngredients]);
 
     return (
         <section className={'pl-4'} ref={dropTarget}>
@@ -82,7 +87,7 @@ const BurgerConstructor = () => {
                 />
             }
 
-            <TotalPanel />
+            <TotalPanel price={totalPrice}/>
         </section>
     )
 }
