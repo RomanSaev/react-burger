@@ -1,4 +1,4 @@
-import react from 'react'
+import react, { useMemo } from 'react'
 import styles from './total-panel.module.css'
 import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,12 +8,20 @@ import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
 
 const TotalPanel = ({ price }) => {
 
-    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const { orderRequest, orderFailed } = useSelector(orderSelector)
     const dispatch = useDispatch();
 
+    const selectedIngredientsIds = useMemo (() => {
+        const ingredientIds = fillingIngredients.map(el => el._id);
+        if (bun) {
+            ingredientIds.push(bun._id)
+        }
+        return ingredientIds;
+    }, [bun, fillingIngredients])
+
     const makeOrderClickHandle = () => {
-        dispatch(makeOrderRequest(selectedIngredients));
+        dispatch(makeOrderRequest(selectedIngredientsIds));
     }
 
     return (

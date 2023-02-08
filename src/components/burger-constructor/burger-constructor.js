@@ -13,7 +13,7 @@ import { getTotalBurgerPrice } from '../../utils/functions-helper'
 import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
 
 const BurgerConstructor = () => {
-    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const { order, isOrderDetailModalShowing } = useSelector(orderSelector);
     const dispatch = useDispatch();
 
@@ -38,12 +38,9 @@ const BurgerConstructor = () => {
        dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
     }
 
-    const bunIngredient = selectedIngredients.find(el => el.type === 'bun')
-    const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
-
     const totalPrice = useMemo(()=> {
-        return getTotalBurgerPrice(selectedIngredients);
-     }, [selectedIngredients]);
+        return getTotalBurgerPrice(bun, fillingIngredients);
+     }, [bun, fillingIngredients]);
 
     return (
         <section className={'pl-4'} ref={dropTarget}>
@@ -53,8 +50,8 @@ const BurgerConstructor = () => {
                     closeModal={closeOrderDetailModal}
                 />}
 
-            {bunIngredient
-                ? <ConstructorItemFixed ingredientData={bunIngredient} type='top'/>
+            {bun
+                ? <ConstructorItemFixed ingredientData={bun} type='top'/>
                 : <ConstructorItemEmpty
                     type='top'
                     text='Выберите булку'
@@ -63,8 +60,8 @@ const BurgerConstructor = () => {
             }
             
             <div className={`${styles.constructorList} mt-4 mb-4 pr-2`}>
-                {selectedFillingIngredients.length > 0
-                    ? selectedFillingIngredients.map((el, index) => {
+                {fillingIngredients.length > 0
+                    ? fillingIngredients.map((el, index) => {
                         return <ConstructorItem
                             key={el.uuid}
                             ingredientData={el}
@@ -79,8 +76,8 @@ const BurgerConstructor = () => {
                 }
             </div>
 
-            {bunIngredient
-                ? <ConstructorItemFixed ingredientData={bunIngredient} type='bottom'/>
+            {bun
+                ? <ConstructorItemFixed ingredientData={bun} type='bottom'/>
                 : <ConstructorItemEmpty
                     type='bottom'
                     text='Выберите булку'

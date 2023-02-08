@@ -1,10 +1,8 @@
-export const getTotalBurgerPrice = (selectedItems) => {
+export const getTotalBurgerPrice = (bun, fillingIngredients) => {
     let resultPrice = 0;
-    const bunIngredient = selectedItems.find(el => el.type === 'bun');
-    const selectedFillingIngredients = selectedItems.filter(el => el.type !== 'bun');
-    if (bunIngredient) {
-        resultPrice += bunIngredient.price * 2;
-        resultPrice += selectedFillingIngredients.reduce((previousValue, currentItem) => {
+    if (bun) {
+        resultPrice += bun.price * 2;
+        resultPrice += fillingIngredients.reduce((previousValue, currentItem) => {
             return previousValue + currentItem.price
         }, 0)
     }

@@ -11,7 +11,7 @@ import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelecto
 
 const BurgerIngredients = () => {
     const { ingredients } = useSelector(ingredientsSelector);
-    const { selectedCounts } = useSelector(burgerConstructorSelector);
+    const burgerConstructor = useSelector(burgerConstructorSelector);
     const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(ingredientDetailSelector)
     const dispatch = useDispatch();
 
@@ -66,6 +66,16 @@ const BurgerIngredients = () => {
         refHeader: refMain,
     })
 
+    const ingredientsCounters = useMemo(() => {
+        const counters = {};
+        burgerConstructor.fillingIngredients.forEach( ingredient => {
+            if (!counters[ingredient._id]) counters[ingredient._id] = 0;
+            counters[ingredient._id]++;
+        })
+        if (burgerConstructor.bun) counters[burgerConstructor.bun._id] = 2;
+        return counters;
+    }, [burgerConstructor])
+
     const closeIngredientDetailModal = () => {
         dispatch({ type: HIDE_INGREDIENT_DETAIL_MODAL });
     }
@@ -98,7 +108,7 @@ const BurgerIngredients = () => {
                         <h3 ref={categoryData.refHeader} className={`${styles.categoryName} mt-10`}>{categoryData.title}</h3>
                         <div className={`${styles.categoryItemsWrap} pl-4`}>
                             {categoryData.ingredients.map(ingredient => {
-                                const ingredientCount = selectedCounts[`id${ingredient._id}`];
+                                const ingredientCount = ingredientsCounters[ingredient._id];
                                 const count = typeof ingredientCount !== 'undefined' && ingredientCount > 0 ? ingredientCount : 0;
                                 return <BurgerIngredient 
                                     key={ingredient._id} 
