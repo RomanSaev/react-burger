@@ -1,17 +1,27 @@
-import react, { useState } from 'react'
+import react from 'react'
 import styles from './burger-ingredient.module.css'
 import PropTypes from 'prop-types';
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { ingredientShapePropType } from '../../prop-types';
+import { useDrag } from 'react-dnd';
 
-const BurgerIngredient = ({ingredientData, selectedCount, setSelected, openModal}) => {
+const BurgerIngredient = ({ ingredientData, selectedCount, openModal }) => {
+    const [{}, dragRef] = useDrag({
+        type: 'ingredient',
+        item: { ...ingredientData }
+    });
+
     const handleClick = () => {
-        setSelected(ingredientData);
-        openModal(true)
+        openModal(ingredientData)
     }
 
     return (
-        <div className={`${styles.ingredientCard} mt-8`} onClick={handleClick}>
+        <div 
+            className={`${styles.ingredientCard} mt-8`} 
+            onClick={handleClick}
+            ref={dragRef}
+            draggable
+        >
             {selectedCount > 0 && <Counter count={selectedCount}/>}
             <div className='pl-4 pr-4'>
                 <img className={styles.img} src={ingredientData.image} alt={ingredientData.name}/>
@@ -31,7 +41,6 @@ const BurgerIngredient = ({ingredientData, selectedCount, setSelected, openModal
 BurgerIngredient.propTypes = {
     ingredientData: ingredientShapePropType.isRequired,
     selectedCount: PropTypes.number,
-    setSelected: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
 }
 

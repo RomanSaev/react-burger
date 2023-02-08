@@ -31,7 +31,7 @@ const OrderDetails = ({ order }) => {
 }
 
 OrderDetails.propTypes = {
-    order: orderShapePropType.isRequired,
+    order: orderShapePropType,
 }
 
 export default OrderDetails

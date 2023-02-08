@@ -27,6 +27,7 @@
     color: #F2F2F3;
     flex-grow: 1;
     box-sizing: border-box;
+    transition: all 0.3ms;
 }
 
 .top .constructorItemEmptyInner {
@@ -35,4 +36,8 @@
 
 .bottom .constructorItemEmptyInner {
     border-radius: 40px 40px 88px 88px
+}
+
+.cute {
+    border: 1px solid yellow;
 }

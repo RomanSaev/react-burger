@@ -1,6 +1,5 @@
 import react from 'react'
 import styles from './ingredient-details.module.css'
-import PropTypes from 'prop-types';
 import { ingredientShapePropType } from '../../prop-types';
 
 const IngredientDetails = ({ ingredient }) => {

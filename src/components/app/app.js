@@ -1,56 +1,27 @@
-import react, { useEffect, useState } from 'react'
+import react, { useEffect } from 'react'
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
-import { getIngredients } from '../../utils/react-burger-api'
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context'
-import { BurgerIngredientsContext } from '../../contexts/burger-ingredients-context'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchIngredients } from '../../store/actions/ingredients'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { ingredientsSelector } from '../../store/selectors'
 
 const App = () => {
-    const [ingredietnsRequest, setIngredietnsRequest] = useState({
-        data: [],
-        isLoading: false,
-        error: false,
-    })
-
-    const [selectedIngredients, setSelectedIngredients] = useState([]);
-    const [selectedCounts, setSelectedCounts] = useState({ //объект с количествами выбранных ингредиентов (для вывода каунтеров в BurgerIngredients)
-        id60d3b41abdacab0026a733c6: 2,
-    });
-
-    const [orderRequest, setOrderRequest] = useState({
-        data: null,
-        isLoading: false,
-        error: false,
-    })
+    const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(ingredientsSelector);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        loadIngredientsData()
+        dispatch(fetchIngredients());
     }, [])
-
-    async function loadIngredientsData() {
-        try {
-            setIngredietnsRequest({ data: [], isLoading: true, error: false })
-            const fetchData = await getIngredients();
-            if (fetchData?.success && fetchData.data.length > 0) {
-                setIngredietnsRequest({ data: fetchData.data, isLoading: false, error: false })
-
-                setSelectedIngredients([...fetchData.data.slice(0,4)]); //тут временно добавляем ингредиенты в бургер конструктор
-            } else {
-                setIngredietnsRequest({ data: [], isLoading: false, error: true })
-            }
-        }
-        catch(err) {
-            setIngredietnsRequest({ data: [], isLoading: false, error: true })
-        }
-    }
 
     return (
         <div className='app'>
             <AppHeader/>
 
-            {ingredietnsRequest.isLoading && (
+            {ingredientsRequest && (
                 <div className={styles.serviceInfoWrap}>
                     <div className={styles.serviceInfo}>
                         <span>Загружаем данные...</span>
@@ -58,7 +29,7 @@ const App = () => {
                 </div>
             )}
 
-            {ingredietnsRequest.error && (
+            {ingredientsFailed && (
                 <div className={styles.serviceInfoWrap}>
                     <div className={styles.serviceInfo}>
                         <span>Сервис в данный момент недоступен :(</span>
@@ -67,31 +38,14 @@ const App = () => {
                 </div>
             )}
 
-            {ingredietnsRequest.data.length > 0 && (
+            {ingredients.length > 0 && (
                 <main className={styles.mainContent}>
                     <h1 className={`${styles.mainHeader} mt-10 mb-5`}>Соберите бургер</h1>
                     <div className={styles.sectionsWrap}>
-                        <BurgerIngredientsContext.Provider
-                            value={{
-                                data: ingredietnsRequest.data,
-                                selectedCounts,
-                            }}
-                        >
+                        <DndProvider backend={HTML5Backend}>
                             <BurgerIngredients />
-                        </BurgerIngredientsContext.Provider>
-                        
-                        <BurgerConstructorContext.Provider
-                            value={{
-                                selectedIngredients, 
-                                setSelectedIngredients,
-                                selectedCounts,
-                                setSelectedCounts,
-                                orderRequest,
-                                setOrderRequest,
-                            }}
-                        >
                             <BurgerConstructor />
-                        </BurgerConstructorContext.Provider>
+                        </DndProvider>
                     </div>
                 </main>   
             )}

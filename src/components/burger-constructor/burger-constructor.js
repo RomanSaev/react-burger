@@ -1,24 +1,56 @@
-import react, { useContext, useState } from 'react'
+import react, { useMemo, useState } from 'react'
 import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
 import TotalPanel from '../total-panel/total-panel'
 import OrderDetailModal from '../order-detail-modal/order-detail-modal'
-import { BurgerConstructorContext } from '../../contexts/burger-constructor-context'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
+import { useDispatch, useSelector } from 'react-redux'
+import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
+import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
+import { useDrop } from 'react-dnd'
+import { getTotalBurgerPrice } from '../../utils/functions-helper'
+import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
 
 const BurgerConstructor = () => {
-    const { selectedIngredients } = useContext(BurgerConstructorContext);
-    const [isOrderDetailModalShowing, setOrderDetailModalShowing] = useState(false)
+    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { order, isOrderDetailModalShowing } = useSelector(orderSelector);
+    const dispatch = useDispatch();
+
+    const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState('');//храним подсветку блоков пустого бургера в локальном состоянии
+
+    const [{}, dropTarget] = useDrop({
+        accept: 'ingredient',
+        drop(item) {
+            dispatch({ type: ADD_CONSTRUCTOR_ITEM, payload: item})
+            setEmptyBurgerHoverType('');
+        },
+        hover(item) {
+            handleDragHover(item)
+        },
+    })
+
+    const handleDragHover = (item) => {
+        setEmptyBurgerHoverType(item.type)
+    }
+
+    const closeOrderDetailModal = () => {
+       dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
+    }
 
     const bunIngredient = selectedIngredients.find(el => el.type === 'bun')
     const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
 
+    const totalPrice = useMemo(()=> {
+        return getTotalBurgerPrice(selectedIngredients);
+     }, [selectedIngredients]);
+
     return (
-        <section className={'pl-4'}>
+        <section className={'pl-4'} ref={dropTarget}>
             {isOrderDetailModalShowing && 
-                <OrderDetailModal 
-                    closeModal={setOrderDetailModalShowing}
+                <OrderDetailModal
+                    order={order}
+                    closeModal={closeOrderDetailModal}
                 />}
 
             {bunIngredient
@@ -26,6 +58,7 @@ const BurgerConstructor = () => {
                 : <ConstructorItemEmpty
                     type='top'
                     text='Выберите булку'
+                    cute={emptyBurgerHoverType === 'bun'}
                 />
             }
             
@@ -33,13 +66,15 @@ const BurgerConstructor = () => {
                 {selectedFillingIngredients.length > 0
                     ? selectedFillingIngredients.map((el, index) => {
                         return <ConstructorItem
-                            key={index}
+                            key={el.uuid}
                             ingredientData={el}
+                            index={index}
                         />
                     })
                     : <ConstructorItemEmpty
                         type='list'
                         text='Выберите начинку'
+                        cute={emptyBurgerHoverType.length > 0 && emptyBurgerHoverType !== 'bun'}
                     />
                 }
             </div>
@@ -49,12 +84,11 @@ const BurgerConstructor = () => {
                 : <ConstructorItemEmpty
                     type='bottom'
                     text='Выберите булку'
+                    cute={emptyBurgerHoverType === 'bun'}
                 />
             }
 
-            <TotalPanel 
-                openOrderDetailModal={setOrderDetailModalShowing}
-            />
+            <TotalPanel price={totalPrice}/>
         </section>
     )
 }
