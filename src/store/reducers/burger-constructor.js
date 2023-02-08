@@ -1,5 +1,4 @@
 import { ADD_CONSTRUCTOR_ITEM, MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from "../actions/burger-constructor";
-import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     selectedIngredients: [],
@@ -10,7 +9,6 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_CONSTRUCTOR_ITEM: {
             const ingredient = { ...action.payload };
-            ingredient.uuid = uuidv4();
 
             const prevSelectedIngredients = [ ...state.selectedIngredients ];
             const newSelectedCounts = { ...state.selectedCounts };

@@ -7,7 +7,7 @@ import OrderDetailModal from '../order-detail-modal/order-detail-modal'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
 import { useDispatch, useSelector } from 'react-redux'
 import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
-import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
+import { addToConstructor } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
 import { getTotalBurgerPrice } from '../../utils/functions-helper'
 import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
@@ -22,7 +22,7 @@ const BurgerConstructor = () => {
     const [{}, dropTarget] = useDrop({
         accept: 'ingredient',
         drop(item) {
-            dispatch({ type: ADD_CONSTRUCTOR_ITEM, payload: item})
+            dispatch(addToConstructor(item))
             setEmptyBurgerHoverType('');
         },
         hover(item) {
