@@ -2,6 +2,7 @@ import react from 'react'
 import styles from './main-nav-item.module.css'
 import PropTypes from 'prop-types';
 import { BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import { Link } from 'react-router-dom';
 
 const MainNavItem = ({href,active,iconType,txt}) => {
     let icon = null;
@@ -28,10 +29,10 @@ const MainNavItem = ({href,active,iconType,txt}) => {
     active && navItemCls.push(styles.active)
 
     return (
-        <a href={href} className={navItemCls.join(' ')}>
+        <Link to={href} className={navItemCls.join(' ')}>
             {icon}
             <span className={`${styles.text} ml-2`}>{txt}</span>
-        </a>
+        </Link>
     )
 }
 
