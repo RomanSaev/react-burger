@@ -16,3 +16,29 @@ export function makeOrder(ingredientIds = []) {
         })
     }).then(response => response.json())
 }
+
+export function forgotPasswordRequest(email) {
+    return fetch(`${burgerApiUrl}/password-reset`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            email
+        })
+    }).then(response => response.json())
+}
+
+export function resetPasswordRequest({ password, emailCode: token}) {
+    debugger;
+    return fetch(`${burgerApiUrl}/password-reset/reset`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            password,
+            token,
+        })
+    }).then(response => response.json())
+}

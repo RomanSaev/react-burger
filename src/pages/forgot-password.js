@@ -1,21 +1,47 @@
 import { Button, EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { FormInfo } from "../components/form-info/form-info";
+import { fetchForgotPassword } from "../store/actions/forgot-password";
+import { forgotPasswordSelector } from "../store/selectors";
 import styles from './forgot-password.module.css'
 
 export const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { forgotPasswordRequest, forgotPasswordFailed } = useSelector(forgotPasswordSelector)
+
     const onEmailChange = e => {
         setEmail(e.target.value)
     }
 
-    const formSubmit = (e) => {
-
+    const navigateToResetPswrd = () => {
+        debugger;
+        navigate('/reset-password');
     }
+
+    const formSubmit = (e) => {
+        e.preventDefault();
+
+        dispatch(fetchForgotPassword(email))
+            .then(() => { 
+                navigateToResetPswrd()
+            })
+            .catch((e) => {});
+    }
+
+    const isButtonDisabled = forgotPasswordRequest;
+    const btnText = 'Восстановить' + (forgotPasswordRequest ? '...' : '');
+    const formErrorDefaultText = 'Не удалось восстановить пароль. Попробуйте ещё раз';
 
     return (
         <form className={styles.formWrap} onSubmit={formSubmit}>
             <h3 className={styles.formTitle}>Восстановление пароля</h3>
+
+            {forgotPasswordFailed && <FormInfo text={formErrorDefaultText} type='error'/>}
+
             <EmailInput
                 onChange={onEmailChange}
                 value={email}
@@ -23,15 +49,16 @@ export const ForgotPasswordPage = () => {
                 placeholder="Укажите e-mail"
                 isIcon={false}
                 extraClass="mb-6"
+                required={true}
             />
 
             <Button 
-                htmlType="button"
+                htmlType="submit"
                 type="primary"
                 size="large"
-                onClick={() => {}}
+                disabled={isButtonDisabled}
                 >
-                Восстановить
+                {btnText}
             </Button>
 
             <div className={styles.formFooter}>

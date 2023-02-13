@@ -1,0 +1,12 @@
+.formInfo {
+    margin: 12px 0 16px;
+    text-align: center;
+}
+
+.formError {
+    color: #f26b6b;
+}
+
+.formSuccess {
+    color: #f26b6b;
+}

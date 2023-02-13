@@ -9,7 +9,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { ingredientsSelector } from '../../store/selectors'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { BurgerConstructorPage, ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage } from '../../pages'
+import { BurgerConstructorPage, ForgotPasswordPage, LoginPage, ProfilePage, RegisterPage, ResetPasswordPage } from '../../pages'
 
 const App = () => {
 
@@ -24,6 +24,10 @@ const App = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+                    <Route path="/profile" element={<ProfilePage />}>
+                        <Route path="orders" element={<p>Orders</p>}/>
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </div>

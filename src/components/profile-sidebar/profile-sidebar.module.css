@@ -1,0 +1,18 @@
+.profileLinksWrap {
+    max-width: 320px;
+    width: 320px;
+}
+
+.profileLink {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #8585AD;
+    padding: 17px 0;
+    text-decoration: none;
+    display: block;
+}
+
+.active {
+    color: #F2F2F3;
+}
