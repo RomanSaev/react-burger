@@ -4,21 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchForgotPassword } from "../store/actions/forgot-password";
-import { forgotPasswordSelector } from "../store/selectors";
+import { resetPasswordSelector } from "../store/selectors";
 import styles from './forgot-password.module.css'
 
 export const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { forgotPasswordRequest, forgotPasswordFailed } = useSelector(forgotPasswordSelector)
+    const { forgotPasswordRequest, forgotPasswordFailed } = useSelector(resetPasswordSelector)
 
     const onEmailChange = e => {
         setEmail(e.target.value)
     }
 
     const navigateToResetPswrd = () => {
-        debugger;
         navigate('/reset-password');
     }
 

@@ -1,14 +1,22 @@
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { FormInfo } from "../components/form-info/form-info";
+import { fetchRegister } from "../store/actions/auth";
+import { authSelector } from "../store/selectors";
 import styles from './register.module.css';
 
 export const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const navigate = useNavigate();
+
+    const {registerRequest, registerFailed} = useSelector(authSelector);
 
     const nameRef = useRef(null)
+    const dispatch = useDispatch();
 
     const onEmailChange = e => {
         setEmail(e.target.value)
@@ -27,17 +35,36 @@ export const RegisterPage = () => {
     }
 
     const formSubmit = (e) => {
+        e.preventDefault();
 
+        if (password.length < 6 || email === '' || name === '') {
+            console.log('register form invalid');
+            return false;
+        }
+
+        dispatch(fetchRegister({ email, password, name }))
+            .then(() => {
+                navigate('/');
+                //console.log('reg success');
+            })
+            .catch(err => {}); 
     }
+
+    const isButtonDisabled = registerRequest;
+    const btnText = 'Зарегистрироваться' + (registerRequest ? '...' : '');
+    const formErrorDefaultText = 'Не удалось зарегистрироваться';
 
     return (
         <form className={styles.formWrap} onSubmit={formSubmit}>
             <h3 className={styles.formTitle}>Регистрация</h3>
+
+            {registerFailed && <FormInfo text={formErrorDefaultText} type='error'/>}
+
             <Input
                 type={'text'}
                 placeholder={'Имя'}
                 onChange={onNameChange}
-                icon={'CurrencyIcon'}
+                icon={false}
                 value={name}
                 name={'name'}
                 error={false}
@@ -54,6 +81,7 @@ export const RegisterPage = () => {
                 placeholder="E-mail"
                 isIcon={false}
                 extraClass="mb-6"
+
             />
             <PasswordInput 
                 onChange={onPasswordChange}
@@ -65,9 +93,9 @@ export const RegisterPage = () => {
                 htmlType="submit"
                 type="primary"
                 size="large"
-                onClick={() => {}}
+                disabled={isButtonDisabled}
             >
-                Зарегистрироваться
+                {btnText}
             </Button>
 
             <div className={styles.formFooter}>

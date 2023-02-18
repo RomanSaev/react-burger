@@ -1,11 +1,19 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { FormInfo } from "../components/form-info/form-info";
+import { fetchLogin } from "../store/actions/auth";
+import { authSelector } from "../store/selectors";
 import styles from './login.module.css';
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+    const { loginRequest, loginFailed } = useSelector(authSelector);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const onEmailChange = e => {
         setEmail(e.target.value)
@@ -16,12 +24,30 @@ export const LoginPage = () => {
     }
 
     const formSubmit = (e) => {
+        e.preventDefault();
 
+        if (password.length < 6 || email === '') {
+            console.log('register form invalid');
+            return false;
+        }
+
+        dispatch(fetchLogin({ email, password }))
+            .then(() => {
+                navigate('/');
+            })
+            .catch(e => {}); 
     }
+
+    const isButtonDisabled = loginRequest;
+    const btnText = 'Войти' + (loginRequest ? '...' : '');
+    const formErrorDefaultText = 'Не удалось авторизироваться';
 
     return (
         <form className={styles.formWrap} onSubmit={formSubmit}>
             <h3 className={styles.formTitle}>Вход</h3>
+
+            {loginFailed && <FormInfo text={formErrorDefaultText} type='error'/>}
+
             <EmailInput 
                 onChange={onEmailChange}
                 value={email}
@@ -29,20 +55,22 @@ export const LoginPage = () => {
                 placeholder="E-mail"
                 isIcon={false}
                 extraClass="mb-6"
+                required={true}
             />
             <PasswordInput 
                 onChange={onPasswordChange}
                 value={password}
                 name={''}
                 extraClass="mb-6"
+                required={true}
             />
             <Button 
                 htmlType="submit"
                 type="primary"
                 size="large"
-                //onClick={() => {}}
+                disabled={isButtonDisabled}
                 >
-                Войти
+                {btnText}
             </Button>
 
             <div className={styles.formFooter}>

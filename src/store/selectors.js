@@ -6,6 +6,6 @@ export const ingredientDetailSelector = state => state.ingredientDetail;
 
 export const orderSelector = state => state.order;
 
-export const forgotPasswordSelector = state => state.forgotPassword;
-
 export const resetPasswordSelector = state => state.resetPassword;
+
+export const authSelector = state => state.auth;

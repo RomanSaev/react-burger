@@ -14,7 +14,7 @@ const AppHeader = () => {
                 </div>
                 <div className={styles.rightNav}>
                     <MainNavItem 
-                        href='/profile'
+                        href='/register'
                         active={false}
                         txt='Личный кабинет'
                         iconType='profile'

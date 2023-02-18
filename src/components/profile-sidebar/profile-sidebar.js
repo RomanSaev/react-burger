@@ -1,8 +1,32 @@
 import classNames from "classnames"
-import { NavLink } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { NavLink, useNavigate } from "react-router-dom"
+import { fetchLogout } from "../../store/actions/auth"
+import { authSelector } from "../../store/selectors"
+import { FormInfo } from "../form-info/form-info"
 import styles from './profile-sidebar.module.css'
 
 export const ProfileSidebar = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { logoutRequest, logoutFailed } = useSelector(authSelector)
+
+    const onLogoutClick = (e) => {
+        e.preventDefault()
+
+        if (logoutRequest) return;
+
+        dispatch(fetchLogout())
+            .then(() => {
+                navigate('/login')
+            })
+            .catch(err => {
+            })
+    }
+
+    const logoutBtnText = 'Выход' + (logoutRequest ? '...' : '');
+    const logoutErrorDefaultText = 'Ошибка выхода';
+    
     return (
 
         <ul className={styles.profileLinksWrap}>
@@ -25,10 +49,12 @@ export const ProfileSidebar = () => {
             </li>
             <li>
                 <NavLink
-                className={styles.profileLink}
+                    className={styles.profileLink}
+                    onClick={onLogoutClick}
                 >
-                    Выход
+                    {logoutBtnText}
                 </NavLink>
+                {logoutFailed && <FormInfo type='error' text={logoutErrorDefaultText} />}
             </li>
         </ul>
     )

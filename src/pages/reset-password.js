@@ -36,7 +36,6 @@ export const ResetPasswordPage = () => {
 
         console.log('bb');
 
-        debugger;
         dispatch(fetchResetPassword({ password, emailCode }))
             .then(() => {
                 setResultSuccess(true);
