@@ -119,7 +119,6 @@ export const fetchLogout = () => {
             if (fetchData?.success) {
                 dispatch({ type: LOGOUT_SUCCESS });
 
-                dispatch({ type: USER_SET, payload: null });
                 deleteCookie('accessToken')
                 localStorage.removeItem('refreshToken');
                 

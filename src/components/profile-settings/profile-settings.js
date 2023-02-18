@@ -21,7 +21,6 @@ export const ProfileSettings = () => {
     const dispatch = useDispatch();
 
     const checkDataChange = () => {
-        debugger;
         const isChanged = name !== user.name 
             || email !== user.email 
             || password !== '';
@@ -71,7 +70,6 @@ export const ProfileSettings = () => {
     }
 
     const onCancelClick = () => {
-        debugger;
         setName(user.name);
         setEmail(user.email);
         setPassword(user.password);

@@ -166,7 +166,7 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: {
-                    ...state.user
+                    ...initialState.user,
                 },
                 logoutRequest: false,
                 logoutFailed: false,
