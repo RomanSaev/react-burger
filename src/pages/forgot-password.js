@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
-import { fetchForgotPassword } from "../store/actions/forgot-password";
+import { fetchForgotPassword } from "../store/actions/reset-password";
 import { resetPasswordSelector } from "../store/selectors";
 import styles from './forgot-password.module.css'
 
@@ -18,7 +18,7 @@ export const ForgotPasswordPage = () => {
     }
 
     const navigateToResetPswrd = () => {
-        navigate('/reset-password');
+        navigate('/reset-password', {state: {resetPassword: true}});
     }
 
     const formSubmit = (e) => {

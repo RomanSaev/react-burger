@@ -1,51 +1,49 @@
 import react, { useEffect } from 'react'
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header'
-import BurgerIngredients from '../burger-ingredients/burger-ingredients'
-import BurgerConstructor from '../burger-constructor/burger-constructor'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchIngredients } from '../../store/actions/ingredients'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { authSelector, ingredientsSelector } from '../../store/selectors'
+import { useDispatch } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BurgerConstructorPage, ForgotPasswordPage, LoginPage, ProfilePage, RegisterPage, ResetPasswordPage } from '../../pages'
-import { getCookie } from '../../utils/functions-helper'
 import { ProfileSettings } from '../profile-settings/profile-settings'
-import { getUser } from '../../store/actions/auth'
-import { Loader } from '../loader/loader'
+import { checkUserAuth } from '../../store/actions/auth'
+import { ProtectedRoute } from '../protected-route/protected-route'
+import { OrderFeedPage } from '../../pages/order-feed'
 
 const App = () => {
     const dispatch = useDispatch();
-    const token = getCookie('accessToken');
-    const { getUserRequest } = useSelector(authSelector);
 
     useEffect(() => {
-        if (token) {
-            dispatch(getUser())
-        }
+        dispatch(checkUserAuth());
     }, [])
 
     return (
         <div className='app'>
             <BrowserRouter>
-                <AppHeader/>
-
-                { token && getUserRequest
-                    ? <Loader/> 
-                    : (<Routes>
-                        <Route path="/" element={<BurgerConstructorPage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
-                        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                        <Route path="/reset-password" element={<ResetPasswordPage />} />
-
-                        <Route path="/profile" element={<ProfilePage />}>
-                            <Route index element={<ProfileSettings />} />
-                            <Route path="orders" element={<p>Orders</p>}/>
-                        </Route>
-                    </Routes>)
-                }
+                <AppHeader />
+                <Routes>
+                    <Route path="/" element={<BurgerConstructorPage />} />
+                    <Route path="/orders-feed" element={<OrderFeedPage />} />
+                    <Route 
+                        path="/login"
+                        element={<ProtectedRoute onlyUnAuth={true}> <LoginPage /> </ProtectedRoute>}
+                    />
+                    <Route 
+                        path="/register"
+                        element={<ProtectedRoute onlyUnAuth={true}> <RegisterPage /> </ProtectedRoute>}
+                    />
+                    <Route 
+                        path="/forgot-password"
+                        element={<ProtectedRoute onlyUnAuth={true}> <ForgotPasswordPage /> </ProtectedRoute>} 
+                    />
+                    <Route
+                        path="/reset-password"
+                        element={<ProtectedRoute onlyUnAuth={true}> <ResetPasswordPage /> </ProtectedRoute>} 
+                    />
+                    <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>}>
+                        <Route index element={<ProfileSettings />} />
+                        <Route path="orders" element={<p>Orders</p>}/>
+                    </Route>
+                </Routes>
             </BrowserRouter>
         </div>
     )

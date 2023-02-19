@@ -1,7 +1,7 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchLogin } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
@@ -13,7 +13,6 @@ export const LoginPage = () => {
     const { loginRequest, loginFailed } = useSelector(authSelector);
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const onEmailChange = e => {
         setEmail(e.target.value)
@@ -32,10 +31,6 @@ export const LoginPage = () => {
         }
 
         dispatch(fetchLogin({ email, password }))
-            .then(() => {
-                navigate('/');
-            })
-            .catch(e => {}); 
     }
 
     const isButtonDisabled = loginRequest;

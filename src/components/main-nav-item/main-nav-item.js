@@ -2,21 +2,20 @@ import react from 'react'
 import styles from './main-nav-item.module.css'
 import PropTypes from 'prop-types';
 import { BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import classNames from 'classnames';
 
-const MainNavItem = ({href,active,iconType,txt}) => {
-    let icon = null;
-    const iconTypeProp = active ? 'primary' : 'secondary'
-    switch(iconType) {
-        case 'burger':
-            icon = <BurgerIcon type={iconTypeProp} />
-            break;
-        case 'list':
-            icon = <ListIcon type={iconTypeProp} />
-            break;
-        case 'profile':
-            icon = <ProfileIcon type={iconTypeProp} />
-            break;
+const MainNavItem = ({href,iconType,txt}) => {
+    const getIcon = (iconType, isActive) => {
+        const iconTypeProp = isActive ? 'primary' : 'secondary'
+        switch(iconType) {
+            case 'burger':
+                return <BurgerIcon type={iconTypeProp} />
+            case 'list': 
+                return <ListIcon type={iconTypeProp} />
+            case 'profile':
+                return <ProfileIcon type={iconTypeProp} />
+        }
     }
 
     const navItemCls = [
@@ -26,22 +25,26 @@ const MainNavItem = ({href,active,iconType,txt}) => {
         'pt-4',
         'pb-4'
     ]
-    active && navItemCls.push(styles.active)
 
     return (
-        <Link to={href} className={navItemCls.join(' ')}>
-            {icon}
-            <span className={`${styles.text} ml-2`}>{txt}</span>
-        </Link>
+        <NavLink
+            to={href}
+            className={({ isActive }) => isActive ? classNames(navItemCls, styles.active) : classNames(navItemCls)}
+        >
+            {({ isActive }) => (
+                <>
+                    {getIcon(iconType, isActive)}
+                    <span className={`${styles.text} ml-2`}>{txt}</span>
+                </>
+            )}
+        </NavLink>
     )
 }
 
 MainNavItem.propTypes = {
     href: PropTypes.string.isRequired,
-    active: PropTypes.bool,
     iconType: PropTypes.string,
     txt: PropTypes.string.isRequired,
 }
-
 
 export default MainNavItem

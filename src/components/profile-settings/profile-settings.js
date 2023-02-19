@@ -43,7 +43,6 @@ export const ProfileSettings = () => {
         setPassword(e.target.value)
     }
 
-
     const submitForm = e => {
         e.preventDefault();
 

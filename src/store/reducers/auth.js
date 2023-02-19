@@ -1,4 +1,4 @@
-import { GET_USER_FAILED, GET_USER_REQUEST, GET_USER_SUCCESS, LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, REGISTER_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, USER_PATCH_FAILED, USER_PATCH_REQUEST, USER_PATCH_SUCCESS, USER_SET, USER_UPDATE } from "../actions/auth";
+import { AUTH_CHECKED, GET_USER_FAILED, GET_USER_REQUEST, GET_USER_SUCCESS, LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, REGISTER_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, USER_PATCH_FAILED, USER_PATCH_REQUEST, USER_PATCH_SUCCESS, USER_SET, USER_UPDATE } from "../actions/auth";
 
 const initialState = {
     registerRequest: false,
@@ -16,6 +16,8 @@ const initialState = {
     patchUserRequest: false,
     patchUserSuccess: false,
     patchUserFailed: false,
+
+    authChecked: false,
 
     user: {
         name: '',
@@ -41,6 +43,7 @@ export const authReducer = (state = initialState, action) => {
                 user: { ...state.user },
                 registerRequest: false,
                 registerFailed: false,
+                authChecked: true,
             }
         }
         case REGISTER_FAILED: {
@@ -66,6 +69,7 @@ export const authReducer = (state = initialState, action) => {
                 user: { ...state.user },
                 loginRequest: false,
                 loginFailed: false,
+                authChecked: true,
             }
         }
         case LOGIN_FAILED: {
@@ -180,6 +184,16 @@ export const authReducer = (state = initialState, action) => {
                 },
                 logoutRequest: false,
                 logoutFailed: true
+            }
+        }
+
+        case AUTH_CHECKED: {
+            return {
+                ...state,
+                user: {
+                    ...state.user
+                },
+                authChecked: true,
             }
         }
 

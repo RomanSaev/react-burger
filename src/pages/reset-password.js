@@ -1,7 +1,7 @@
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchResetPassword } from "../store/actions/reset-password";
 import { resetPasswordSelector } from "../store/selectors";
@@ -12,10 +12,17 @@ export const ResetPasswordPage = () => {
     const [emailCode, setEmailCode] = useState('');
     const [resultSuccess, setResultSuccess] = useState(false);
 
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const { resetPasswordRequest, resetPasswordFailed } = useSelector(resetPasswordSelector)
+
+    useEffect(() => {
+        if (!location.state || !location.state.resetPassword) {
+            navigate('/forgot-password')
+        }
+
+    }, [location.state, navigate])
 
     const onPasswordChange = e => {
         setPassword(e.target.value)
@@ -30,11 +37,8 @@ export const ResetPasswordPage = () => {
 
         setResultSuccess(false);
         if (password.length < 6) {
-            console.log('aa');
             return false;
         }
-
-        console.log('bb');
 
         dispatch(fetchResetPassword({ password, emailCode }))
             .then(() => {

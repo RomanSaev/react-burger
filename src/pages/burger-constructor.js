@@ -7,22 +7,21 @@ import { fetchIngredients } from '../store/actions/ingredients';
 import { ingredientsSelector } from '../store/selectors';
 import styles from './burger-constructor.module.css'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Loader } from '../components/loader/loader';
 
 export const BurgerConstructorPage = () => {
     const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(ingredientsSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchIngredients());
+        if (!ingredientsRequest && !ingredients.length) {
+            dispatch(fetchIngredients());
+        }
     }, [])
     return (
         <>
         {ingredientsRequest && (
-            <div className={styles.serviceInfoWrap}>
-                <div className={styles.serviceInfo}>
-                    <span>Загружаем данные...</span>
-                </div>
-            </div>
+            <Loader />
         )}
 
         {ingredientsFailed && (

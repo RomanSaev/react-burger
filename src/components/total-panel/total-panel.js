@@ -4,12 +4,15 @@ import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-com
 import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
 import PropTypes from 'prop-types';
-import { burgerConstructorSelector, orderSelector } from '../../store/selectors';
+import { authSelector, burgerConstructorSelector, orderSelector } from '../../store/selectors';
+import { useNavigate } from 'react-router-dom';
 
 const TotalPanel = ({ price }) => {
 
     const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const { orderRequest, orderFailed } = useSelector(orderSelector)
+    const { user } = useSelector(authSelector)
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const selectedIngredientsIds = useMemo (() => {
@@ -21,7 +24,11 @@ const TotalPanel = ({ price }) => {
     }, [bun, fillingIngredients])
 
     const makeOrderClickHandle = () => {
-        dispatch(makeOrderRequest(selectedIngredientsIds));
+        if (!user.isLogged) {
+            navigate('/login')
+        } else {
+            dispatch(makeOrderRequest(selectedIngredientsIds));
+        }
     }
 
     return (

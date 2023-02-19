@@ -1,4 +1,4 @@
-import { deleteCookie, saveTokens } from "../../utils/functions-helper";
+import { deleteCookie, getCookie, saveTokens } from "../../utils/functions-helper";
 import { getUserRequest, loginRequest, logoutRequest, refreshTokenRequest, registerRequest, updateUserRequest } from "../../utils/react-burger-api";
 // import { USER_SET } from "./user";
 
@@ -25,6 +25,8 @@ export const USER_PATCH_SUCCESS = 'USER_PATCH_SUCCESS'
 export const USER_PATCH_FAILED = 'USER_PATCH_FAILED'
 
 export const USER_UPDATE = 'USER_UPDATE'
+
+export const AUTH_CHECKED = 'AUTH_CHECKED'
 
 export const fetchRegister = (data) => {
     return async dispatch => {
@@ -191,6 +193,18 @@ export const updateUser = (data) => {
         catch(err) {
             dispatch({ type: USER_PATCH_FAILED });
             throw new Error('patch user error');
+        }
+    }
+}
+
+export const checkUserAuth = () => {
+    return async dispatch => {
+        if(getCookie('accessToken')) {
+            dispatch(getUser()).finally(() => {
+                dispatch({ type: AUTH_CHECKED })
+            })
+        } else {
+            dispatch({ type: AUTH_CHECKED })
         }
     }
 }
