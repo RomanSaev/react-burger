@@ -1,11 +1,10 @@
-import { HIDE_ORDER_DETAIL_MODAL, MAKE_ORDER_FAILED, MAKE_ORDER_REQUEST, MAKE_ORDER_SUCCESS, SHOW_ORDER_DETAIL_MODAL } from "../actions/order";
+import { MAKE_ORDER_FAILED, MAKE_ORDER_REQUEST, MAKE_ORDER_SUCCESS } from "../actions/order";
 
 const initialState = {
     order: null,
+    
     orderRequest: false,
     orderFailed: false,
-
-    isOrderDetailModalShowing: false,
 }
 
 export const orderReducer = (state = initialState, action) => {
@@ -26,20 +25,6 @@ export const orderReducer = (state = initialState, action) => {
                 orderRequest: false,
                 orderFailed: true,
                 order: null,
-            }
-        }
-        case SHOW_ORDER_DETAIL_MODAL: {
-            return {
-                ...state, 
-                isOrderDetailModalShowing: true,
-                order: { ...state.order }
-            }
-        }
-        case HIDE_ORDER_DETAIL_MODAL: {
-            return {
-                ...state, 
-                isOrderDetailModalShowing: false,
-                order: { ...state.order }
             }
         }
         default:

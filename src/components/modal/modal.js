@@ -4,15 +4,22 @@ import ReactDOM from 'react-dom';
 import styles from './modal.module.css'
 import PropTypes from 'prop-types';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const modalRoot = document.getElementById('modal');
 
 const Modal = (props) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    const closeModal = () => {
+        location?.state?.background && navigate(location.state.background)
+    }
 
     useEffect(() => {
         const keyCloseHandler = (e) => {
             if (e.key === 'Escape') {
-                props.closeModal();
+                closeModal();
             }
         }
 
@@ -32,7 +39,7 @@ const Modal = (props) => {
                             {props.title}
                         </div>
                         <div className={styles.closeIcon}>
-                            <CloseIcon type="primary" onClick={() => props.closeModal()}/>
+                            <CloseIcon type="primary" onClick={() => closeModal()}/>
                         </div>
                     </div>
                     <div className={styles.modalBody}>
@@ -40,7 +47,7 @@ const Modal = (props) => {
                     </div>
                 </div>
             </div>
-            <ModalOverlay closeModal={props.closeModal}/>
+            <ModalOverlay closeModal={closeModal}/>
         </>
         ),
         modalRoot
@@ -48,7 +55,6 @@ const Modal = (props) => {
 }
 
 Modal.propTypes = {
-    closeModal: PropTypes.func.isRequired,
     title: PropTypes.string,
 }
 

@@ -1,0 +1,14 @@
+.detailHeader {
+    margin-top: 120px;
+    min-height: 64px;
+    padding: 40px 100px 0 40px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+}
+.detailHeaderTitle {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 40px;
+    color: #F2F2F3;
+}

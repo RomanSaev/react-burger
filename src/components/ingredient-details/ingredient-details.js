@@ -1,10 +1,23 @@
-import react from 'react'
+import react, { useEffect } from 'react'
 import styles from './ingredient-details.module.css'
-import { ingredientShapePropType } from '../../prop-types';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { ingredientsSelector } from '../../store/selectors';
+import { INGREDIENT_DETAIL_SET } from '../../store/actions/ingredient-detail';
 
-const IngredientDetails = ({ ingredient }) => {
+const IngredientDetails = () => {
+    const { ingredients } = useSelector(ingredientsSelector);
+    const dispatch = useDispatch();
+    const { id: ingredientId } = useParams();
+    const ingredient = ingredients.length ? ingredients.find(el => el._id === ingredientId) : null;
     
-    const consistItems = [
+    useEffect(() => {
+        if (ingredient) {
+            dispatch({ type: INGREDIENT_DETAIL_SET, payload: ingredient});
+        }
+    }, [dispatch, ingredient])
+
+    const consistItems = ingredient ? [
         {
             title: 'Калории, ккал',
             number: ingredient?.calories ? ingredient.calories : '-',
@@ -21,35 +34,36 @@ const IngredientDetails = ({ ingredient }) => {
             title: 'Углеводы, г',
             number: ingredient.carbohydrates ? ingredient.carbohydrates : '-',
         }
-    ];
+    ] : [];
 
     return (
-        <div className={styles.ingredientDesc}>
-            <img className={styles.img} src={ingredient.image} alt={ingredient.name}/>
-            <div className={styles.name}>
-                {ingredient.name}
-            </div>
-            
-            <div className={styles.consist}>
-                {consistItems.map((el, index) => {
-                    return (
-                        <div className={styles.consistItem} key={index}>
-                            <span className={styles.consistItemTitle}>
-                                {el.title}
-                            </span>
-                            <span className={styles.consistItemNumber}>
-                                {el.number}
-                            </span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+        <>
+            {ingredient && consistItems
+                ? (<div className={styles.ingredientDesc}>
+                    <img className={styles.img} src={ingredient.image} alt={ingredient.name}/>
+                    <div className={styles.name}>
+                        {ingredient.name}
+                    </div>
+                    
+                    <div className={styles.consist}>
+                        {consistItems.map((el, index) => {
+                            return (
+                                <div className={styles.consistItem} key={index}>
+                                    <span className={styles.consistItemTitle}>
+                                        {el.title}
+                                    </span>
+                                    <span className={styles.consistItemNumber}>
+                                        {el.number}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>)
+                : null
+            }
+        </>
     )
-}
-
-IngredientDetails.propTypes = {
-    ingredient: ingredientShapePropType.isRequired,
 }
 
 export default IngredientDetails

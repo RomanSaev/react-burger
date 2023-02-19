@@ -3,18 +3,15 @@ import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
 import TotalPanel from '../total-panel/total-panel'
-import OrderDetailModal from '../order-detail-modal/order-detail-modal'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
 import { useDispatch, useSelector } from 'react-redux'
-import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
 import { addToConstructor } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
 import { getTotalBurgerPrice } from '../../utils/functions-helper'
-import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
+import { burgerConstructorSelector } from '../../store/selectors'
 
 const BurgerConstructor = () => {
     const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
-    const { order, isOrderDetailModalShowing } = useSelector(orderSelector);
     const dispatch = useDispatch();
 
     const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState('');//храним подсветку блоков пустого бургера в локальном состоянии
@@ -34,22 +31,12 @@ const BurgerConstructor = () => {
         setEmptyBurgerHoverType(item.type)
     }
 
-    const closeOrderDetailModal = () => {
-       dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
-    }
-
     const totalPrice = useMemo(()=> {
         return getTotalBurgerPrice(bun, fillingIngredients);
      }, [bun, fillingIngredients]);
 
     return (
         <section className={'pl-4'} ref={dropTarget}>
-            {isOrderDetailModalShowing && 
-                <OrderDetailModal
-                    order={order}
-                    closeModal={closeOrderDetailModal}
-                />}
-
             {bun
                 ? <ConstructorItemFixed ingredientData={bun} type='top'/>
                 : <ConstructorItemEmpty

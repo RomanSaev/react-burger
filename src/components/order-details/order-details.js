@@ -1,9 +1,11 @@
 import react from 'react'
 import styles from './order-details.module.css'
 import { orderShapePropType } from '../../prop-types';
+import { useSelector } from 'react-redux';
+import { orderSelector } from '../../store/selectors';
 
-const OrderDetails = ({ order }) => {
-
+const OrderDetails = ( ) => {
+    const { order } = useSelector(orderSelector);
     const orderTextByStatus = {
         order_begin: 'Ваш заказ начали готовить'
     }
@@ -11,7 +13,7 @@ const OrderDetails = ({ order }) => {
     return (
         <div className={styles.orderDetailWrap}>
             <div className={styles.orderId}>
-                {order.number}
+                {order ? order.number : '########'}
             </div>
             <div className={styles.orderIdTitle}>
                 идентификатор заказа

@@ -112,7 +112,6 @@ export function getUserRequest() {
 }
 
 export function updateUserRequest(data) {
-    console.log(data);
     return fetch(`${BURGER_API_URL}/auth/user`, {
         method: 'PATCH',
         headers: {

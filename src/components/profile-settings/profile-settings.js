@@ -47,7 +47,6 @@ export const ProfileSettings = () => {
         e.preventDefault();
 
         if (!dataChanged || (password !== '' && password.length < 6) || email === '' || name === '') {
-            console.log('profile settings form invalid');
             return false;
         }
 
@@ -58,14 +57,12 @@ export const ProfileSettings = () => {
 
         dispatch(updateUser(patchData))
             .then(() => {
-                console.log('SUCCESS profile patch')
                 setDataChanged(false);
             })
             .catch(err => {
 
             })
 
-        console.log('profileSubmit')
     }
 
     const onCancelClick = () => {

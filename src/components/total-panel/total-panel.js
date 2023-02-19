@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
 import PropTypes from 'prop-types';
 import { authSelector, burgerConstructorSelector, orderSelector } from '../../store/selectors';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const TotalPanel = ({ price }) => {
-
     const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const { orderRequest, orderFailed } = useSelector(orderSelector)
     const { user } = useSelector(authSelector)
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const selectedIngredientsIds = useMemo (() => {
         const ingredientIds = fillingIngredients.map(el => el._id);
@@ -27,7 +27,10 @@ const TotalPanel = ({ price }) => {
         if (!user.isLogged) {
             navigate('/login')
         } else {
-            dispatch(makeOrderRequest(selectedIngredientsIds));
+            dispatch(makeOrderRequest(selectedIngredientsIds))
+                .then(() => {
+                    navigate('/order', { state: { background: location } })
+                })
         }
     }
 

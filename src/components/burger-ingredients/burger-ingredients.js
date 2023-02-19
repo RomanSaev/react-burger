@@ -2,9 +2,7 @@ import react, { useEffect, useMemo, useRef } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { HIDE_INGREDIENT_DETAIL_MODAL, SHOW_INGREDIENT_DETAIL_MODAL } from '../../store/actions/ingredient-detail';
 import { useInView } from 'react-intersection-observer';
 import { SET_BROWSED_CATEGORY } from '../../store/actions/ingredient-detail';
 import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelector } from '../../store/selectors';
@@ -12,7 +10,7 @@ import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelecto
 const BurgerIngredients = () => {
     const { ingredients } = useSelector(ingredientsSelector);
     const burgerConstructor = useSelector(burgerConstructorSelector);
-    const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(ingredientDetailSelector)
+    const { browsedCategory } = useSelector(ingredientDetailSelector)
     const dispatch = useDispatch();
 
     const useInViewParams = { threshold: 0.2 }; //для более плавной смены активной просматриваемой категории
@@ -76,21 +74,8 @@ const BurgerIngredients = () => {
         return counters;
     }, [burgerConstructor])
 
-    const closeIngredientDetailModal = () => {
-        dispatch({ type: HIDE_INGREDIENT_DETAIL_MODAL });
-    }
-
-    const openIngredientDetailModal = (ingredient) => {
-        dispatch({ type: SHOW_INGREDIENT_DETAIL_MODAL, payload: ingredient });
-    }
-
     return (
         <section>
-            {isIngrDetailModalShowing && 
-                <IngredientDetailModal
-                    closeModal={closeIngredientDetailModal}
-                    ingredient={selectedIngredient}
-                />}
             <div style={{ display: 'flex' }}>
                 <Tab value='bun' active={browsedCategory === 'bun'} onClick={() => onTabClick(refBun)}>
                     Булки
@@ -114,7 +99,6 @@ const BurgerIngredients = () => {
                                     key={ingredient._id} 
                                     ingredientData={ingredient}
                                     selectedCount={count}
-                                    openModal={openIngredientDetailModal}
                                 />
                             })}
                         </div>

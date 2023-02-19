@@ -14,22 +14,8 @@ export const fetchForgotPassword = (email) => {
             dispatch({ type: FORGOT_PASSWORD_REQUEST })
             const fetchData = await forgotPasswordRequest(email)
 
-
-            // TEST
-            const test = new Promise((resolve, reject) => {
-                setTimeout(() => { 
-                    resolve();
-                }, 3000)
-            })
-            await test;
-
-
             if (fetchData?.success) {
                 dispatch({ type: FORGOT_PASSWORD_SUCCESS })
-
-                //test
-                // throw new Error('')
-
                 return true;
             } else {
                 dispatch({ type: FORGOT_PASSWORD_FAILED })
@@ -49,14 +35,6 @@ export const fetchResetPassword = (data) => {
         try {
             dispatch({ type: RESET_PASSWORD_REQUEST});
             const fetchData = await resetPasswordRequest(data)
-
-            // TEST
-            const test = new Promise((resolve, reject) => {
-                setTimeout(() => { 
-                    resolve();
-                }, 3000)
-            })
-            await test;
 
             if (fetchData?.success) {
                 dispatch({ type: RESET_PASSWORD_SUCCESS });

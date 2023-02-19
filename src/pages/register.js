@@ -38,14 +38,12 @@ export const RegisterPage = () => {
         e.preventDefault();
 
         if (password.length < 6 || email === '' || name === '') {
-            console.log('register form invalid');
             return false;
         }
 
         dispatch(fetchRegister({ email, password, name }))
             .then(() => {
                 navigate('/');
-                //console.log('reg success');
             })
             .catch(err => {}); 
     }

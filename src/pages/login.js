@@ -26,7 +26,6 @@ export const LoginPage = () => {
         e.preventDefault();
 
         if (password.length < 6 || email === '') {
-            console.log('register form invalid');
             return false;
         }
 

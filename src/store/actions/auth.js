@@ -36,14 +36,6 @@ export const fetchRegister = (data) => {
             dispatch({ type: REGISTER_REQUEST });
             const fetchData = await registerRequest(data)
 
-            // TEST
-            const test = new Promise((resolve, reject) => {
-                setTimeout(() => { 
-                    resolve();
-                }, 3000)
-            })
-            await test;
-
             if (fetchData?.success) {
                 dispatch({ type: REGISTER_SUCCESS });
 
@@ -78,14 +70,6 @@ export const fetchLogin = (data) => {
 
             dispatch({ type: LOGIN_REQUEST });
             const fetchData = await loginRequest(data)
-
-            // TEST
-            const test = new Promise((resolve, reject) => {
-                setTimeout(() => { 
-                    resolve();
-                }, 3000)
-            })
-            await test;
 
             if (fetchData?.success) {
                 dispatch({ type: LOGIN_SUCCESS });
