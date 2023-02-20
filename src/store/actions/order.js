@@ -10,20 +10,16 @@ export const makeOrderRequest = (ingredientIds) => {
             dispatch({ type: MAKE_ORDER_REQUEST })
             const fetchData = await makeOrder(ingredientIds);
 
-            if (fetchData?.success) {
-                dispatch({
-                    type: MAKE_ORDER_SUCCESS,
-                    payload: { number: fetchData.order.number }
-                })
-                return true
-            } else {
-                dispatch({ type: MAKE_ORDER_FAILED })
-                throw new Error('')
-            }
+            dispatch({
+                type: MAKE_ORDER_SUCCESS,
+                payload: { number: fetchData.order.number }
+            })
         }
-        catch{
+        catch {
             dispatch({ type: MAKE_ORDER_FAILED })
-            throw new Error('make order failed')
+            
+            //важно для корректной обработки неуспешного заказа в компоненте (не открывать попап)
+            throw new Error('make order error')
         }
     }
 }

@@ -28,7 +28,7 @@ export const ForgotPasswordPage = () => {
             .then(() => { 
                 navigateToResetPswrd()
             })
-            .catch((e) => {});
+            .catch((err) => {});
     }
 
     const isButtonDisabled = forgotPasswordRequest;

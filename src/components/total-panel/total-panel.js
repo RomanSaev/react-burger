@@ -30,23 +30,22 @@ const TotalPanel = ({ price }) => {
         } else {
             dispatch(makeOrderRequest(selectedIngredientsIds))
                 .then(() => {
+                    //открываем попап только в случае успешного создания заказа
                     navigate('/order', { state: { background: location } })
                     dispatch({ type: RESET_CONSTRUCTOR_ITEMS })
                 })
+                .catch(err => {})
         }
     }
 
     return (
+        <>
         <div className={`${styles.totalWrap} mt-10 mb-10 pr-4`}>
             {orderRequest && 
                 <span className={styles.makeOrderLoadingInfo}>Оформляем заказ, подождите...</span>
             }
 
-            {orderFailed && 
-                <span className={styles.makeOrderLoadingError}>Ошибка при оформлении заказа</span>
-            }
-
-            {!orderRequest && !orderFailed &&
+            {!orderRequest &&
                 <>
                     {price > 0 && <div className={styles.priceWrap}>
                         {<span>{price}</span>}
@@ -65,6 +64,11 @@ const TotalPanel = ({ price }) => {
                 </>
             }
         </div>
+
+        {orderFailed && 
+            <div className={styles.makeOrderLoadingError}>Ошибка при оформлении заказа</div>
+        }
+        </>
     )
 }
 

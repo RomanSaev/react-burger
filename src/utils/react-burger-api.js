@@ -1,44 +1,55 @@
-import { BURGER_API_URL } from '../constants'
+import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
 import { getCookie, saveTokens } from './functions-helper';
 
-const checkReponse = (res) => {
-    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+const checkReponse = async (res) => {
+    if (!res.ok) throw `Ошибка ${res.status}`
+    return await res.json()
 };
+
+const checkSuccess = (res) => {
+    if (res && res.success) {
+        return res;
+    }
+    throw 'Ответ не success'
+}
+
+//обертка над fetch с проверками ответов сервера
+const request = async (endpoint, options) => {
+    const fetchData = await fetch(`${BURGER_API_URL}${endpoint}`, options)
+    const response = await checkReponse(fetchData);
+    return checkSuccess(response)
+}
+
+//получение списка ингредиентов
+export async function getIngredients() {
+    return await request(ENDPOINT_INGREDIENTS)
+}
 
 export const fetchWithRefresh = async (url, options) => {
     try {
-        const res = await fetch(url, options);
-        // throw new Error ('jwt expired')
-        return await checkReponse(res);
+        // throw new Error ('jwt expired') //test
+        return await request(url, options);
     } catch (err) {
         if (err.message === "jwt expired") {
             let authToken;
             const refreshData = await refreshTokenRequest(); //обновляем токен
-            if (!refreshData.success) {
-                return Promise.reject(refreshData);
-            }
 
             authToken = refreshData.accessToken.split('Bearer ')[1];
             if (authToken) {
                 saveTokens(authToken, refreshData.refreshToken)
             }
             options.headers['Authorization'] = refreshData.accessToken;
-            const res = await fetch(url, options); //повторяем запрос
 
-            return await checkReponse(res);
+            return await request(url, options); //повторяем запрос
         } else {
-            return Promise.reject(err);
+            throw 'refresh token err'
         }
     }
   };
 
-export function getIngredients() {
-    return fetch(`${BURGER_API_URL}/ingredients`)
-        .then(checkReponse)
-}
-
-export function makeOrder(ingredientIds = []) {
-    return fetch(`${BURGER_API_URL}/orders`, {
+//создание заказа
+export const makeOrder = async (ingredientIds) => {
+    return await request(ENDPOINT_MAKE_ORDER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -46,11 +57,12 @@ export function makeOrder(ingredientIds = []) {
         body: JSON.stringify({
             ingredients: ingredientIds
         })
-    }).then(checkReponse)
+    })
 }
 
-export function forgotPasswordRequest(email) {
-    return fetch(`${BURGER_API_URL}/password-reset`, {
+//отправка запроса на получение письма по причине "Забыл пароль"
+export const forgotPasswordRequest = async (email) => {
+    return await request(ENDPOINT_PASSWORD_FORGOT, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -58,11 +70,12 @@ export function forgotPasswordRequest(email) {
         body: JSON.stringify({
             email
         })
-    }).then(checkReponse)
+    })
 }
 
-export function resetPasswordRequest({ password, emailCode: token}) {
-    return fetch(`${BURGER_API_URL}/password-reset/reset`, {
+//отправка запроса на изменение забытого пароля
+export const resetPasswordRequest = async ({ password, emailCode: token}) => {
+    return await request(ENDPOINT_PASSWORD_RESET, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -71,11 +84,12 @@ export function resetPasswordRequest({ password, emailCode: token}) {
             password,
             token,
         })
-    }).then(checkReponse)
+    })
 }
 
-export function registerRequest({ email, password, name }) {
-    return fetch(`${BURGER_API_URL}/auth/register`, {
+//отправка запроса на регистрацию
+export const registerRequest = async ({ email, password, name }) => {
+    return await request(ENDPOINT_REGISTER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -85,11 +99,12 @@ export function registerRequest({ email, password, name }) {
             password, 
             name,
         })
-    }).then(checkReponse)
+    })
 }
 
-export function loginRequest({ email, password }) {
-    return fetch(`${BURGER_API_URL}/auth/login`, {
+//отправка запроса на авторизацию
+export const loginRequest = async ({ email, password }) => {
+    return await request(ENDPOINT_LOGIN, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -98,11 +113,12 @@ export function loginRequest({ email, password }) {
             email, 
             password, 
         })
-    }).then(checkReponse)
+    })
 }
 
-export function getUserRequest() {
-    return fetchWithRefresh(`${BURGER_API_URL}/auth/user`, {
+//запрос получения пользователя
+export const getUserRequest = async () => {
+    return await fetchWithRefresh(ENDPOINT_USER, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -111,8 +127,9 @@ export function getUserRequest() {
     })
 }
 
-export function updateUserRequest(data) {
-    return fetch(`${BURGER_API_URL}/auth/user`, {
+//запрос на изменение параметров пользователя
+export const updateUserRequest = async (data) => {
+    return await request(ENDPOINT_USER, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -121,11 +138,12 @@ export function updateUserRequest(data) {
         body: JSON.stringify({
             ...data
         })
-    }).then(checkReponse);
+    })
 }
 
-export function refreshTokenRequest() {
-    return fetch(`${BURGER_API_URL}/auth/token`, {
+//запрос на обновление токена
+export const refreshTokenRequest = async () => {
+    return await request(ENDPOINT_TOKEN_REFRESH, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -133,11 +151,12 @@ export function refreshTokenRequest() {
         body: JSON.stringify({
             'token': localStorage.getItem('refreshToken')
         })
-    }).then(checkReponse);
+    })
 }
 
-export function logoutRequest() {
-    return fetch(`${BURGER_API_URL}/auth/logout`, {
+//запрос на выход из профиля
+export const logoutRequest = async () => {
+    return await request(ENDPOINT_LOGOUT, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -145,5 +164,5 @@ export function logoutRequest() {
         body: JSON.stringify({
             'token': localStorage.getItem('refreshToken')
         })
-    }).then(checkReponse)
+    })
 }

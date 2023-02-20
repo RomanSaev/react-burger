@@ -59,9 +59,7 @@ export const ProfileSettings = () => {
             .then(() => {
                 setDataChanged(false);
             })
-            .catch(err => {
-
-            })
+            .catch(err => {})
 
     }
 

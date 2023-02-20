@@ -1,6 +1,5 @@
 import { deleteCookie, getCookie, saveTokens } from "../../utils/functions-helper";
-import { getUserRequest, loginRequest, logoutRequest, refreshTokenRequest, registerRequest, updateUserRequest } from "../../utils/react-burger-api";
-// import { USER_SET } from "./user";
+import { getUserRequest, loginRequest, logoutRequest, registerRequest, updateUserRequest } from "../../utils/react-burger-api";
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
@@ -36,29 +35,20 @@ export const fetchRegister = (data) => {
             dispatch({ type: REGISTER_REQUEST });
             const fetchData = await registerRequest(data)
 
-            if (fetchData?.success) {
-                dispatch({ type: REGISTER_SUCCESS });
+            dispatch({ type: REGISTER_SUCCESS });
 
-                authToken = fetchData.accessToken.split('Bearer ')[1];
-                
-                if (authToken) {
-                    // Сохраняем токен в куку token
-                    // setCookie('accessToken', authToken);
-
-                    saveTokens(authToken, fetchData.refreshToken)
-                }
-
-                // dispatch({ type: USER_SET, payload: fetchData.user})
-
-                return true;
-            } else {
-                dispatch({ type: REGISTER_FAILED });
-                throw new Error('');
+            authToken = fetchData.accessToken.split('Bearer ')[1];
+            if (authToken) {
+                saveTokens(authToken, fetchData.refreshToken)
             }
+
+            dispatch({
+                type: USER_SET,
+                payload: fetchData.user,
+            })
         }
-        catch {
+        catch (err) {
             dispatch({ type: REGISTER_FAILED });
-            throw new Error('register fetch error');
         }
     }
 }
@@ -71,28 +61,21 @@ export const fetchLogin = (data) => {
             dispatch({ type: LOGIN_REQUEST });
             const fetchData = await loginRequest(data)
 
-            if (fetchData?.success) {
-                dispatch({ type: LOGIN_SUCCESS });
+            dispatch({ type: LOGIN_SUCCESS });
 
-                authToken = fetchData.accessToken.split('Bearer ')[1];
-                if (authToken) {
-                    saveTokens(authToken, fetchData.refreshToken)
-                }
-                
-                dispatch({
-                    type: USER_SET,
-                    payload: fetchData.user,
-                })
-
-                return true;
-            } else {
-                dispatch({ type: LOGIN_FAILED });
-                throw new Error('');
+            authToken = fetchData.accessToken.split('Bearer ')[1];
+            if (authToken) {
+                saveTokens(authToken, fetchData.refreshToken)
             }
+            
+            dispatch({
+                type: USER_SET,
+                payload: fetchData.user,
+            })
+
         }
-        catch {
+        catch (err) {
             dispatch({ type: LOGIN_FAILED });
-            throw new Error('login fetch error');
         }
     }
 }
@@ -101,22 +84,15 @@ export const fetchLogout = () => {
     return async dispatch => {
         try {
             dispatch({ type: LOGOUT_REQUEST });
-            const fetchData = await logoutRequest()
-            if (fetchData?.success) {
-                dispatch({ type: LOGOUT_SUCCESS });
+            await logoutRequest()
 
-                deleteCookie('accessToken')
-                localStorage.removeItem('refreshToken');
-                
-                return true;
-            } else {
-                dispatch({ type: LOGOUT_FAILED });
-                throw new Error('');
-            }
+            dispatch({ type: LOGOUT_SUCCESS });
+            deleteCookie('accessToken')
+            localStorage.removeItem('refreshToken');
         }
         catch {
             dispatch({ type: LOGOUT_FAILED });
-            throw new Error('logout fetch error');
+            throw 'logout fetch error';
         }
     }
 }
@@ -127,26 +103,16 @@ export const getUser = () => {
             dispatch({ type: GET_USER_REQUEST });
 
             const fetchData = await getUserRequest()
-            if (fetchData?.success) {
-                dispatch({
-                    type: GET_USER_SUCCESS,
-                });
 
-                dispatch({
-                    type: USER_SET,
-                    payload: fetchData.user,
-                })
+            dispatch({ type: GET_USER_SUCCESS });
 
-                return true;
-            } else {
-                dispatch({ type: GET_USER_FAILED });
-                throw new Error(fetchData.message || '');
-            }
+            dispatch({
+                type: USER_SET,
+                payload: fetchData.user,
+            })
         }
         catch(err) {
-            dispatch({
-                type: GET_USER_FAILED,
-            });
+            dispatch({ type: GET_USER_FAILED });
         }
     }
 }
@@ -157,26 +123,18 @@ export const updateUser = (data) => {
             dispatch({ type: USER_PATCH_REQUEST });
             const fetchData = await updateUserRequest(data)
 
-            if (fetchData?.success) {
-                dispatch({
-                    type: USER_PATCH_SUCCESS,
-                    // payload: fetchData.user,
-                });
+            dispatch({ type: USER_PATCH_SUCCESS });
 
-                dispatch({
-                    type: USER_UPDATE,
-                    payload: fetchData.user,
-                })
-
-                return true;
-            } else {
-                dispatch({ type: USER_PATCH_FAILED });
-                throw new Error('');
-            }
+            dispatch({
+                type: USER_UPDATE,
+                payload: fetchData.user,
+            })
         }
         catch(err) {
             dispatch({ type: USER_PATCH_FAILED });
-            throw new Error('patch user error');
+
+            //важно
+            throw 'patch user err';
         }
     }
 }

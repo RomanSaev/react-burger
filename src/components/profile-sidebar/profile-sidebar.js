@@ -20,8 +20,7 @@ export const ProfileSidebar = () => {
             .then(() => {
                 navigate('/login')
             })
-            .catch(err => {
-            })
+            .catch(err => {})
     }
 
     const logoutBtnText = 'Выход' + (logoutRequest ? '...' : '');

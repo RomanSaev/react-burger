@@ -1,7 +1,7 @@
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchRegister } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
@@ -11,7 +11,6 @@ export const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const navigate = useNavigate();
 
     const {registerRequest, registerFailed} = useSelector(authSelector);
 
@@ -42,10 +41,6 @@ export const RegisterPage = () => {
         }
 
         dispatch(fetchRegister({ email, password, name }))
-            .then(() => {
-                navigate('/');
-            })
-            .catch(err => {}); 
     }
 
     const isButtonDisabled = registerRequest;

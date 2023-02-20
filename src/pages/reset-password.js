@@ -44,9 +44,10 @@ export const ResetPasswordPage = () => {
             .then(() => {
                 setResultSuccess(true);
             })
-            .catch((e) => {})
+            .catch((err) => {})
     }
 
+    const isButtonDisabled = resetPasswordRequest;
     const defaultSuccessText = 'Пароль успешно изменён'
     const formErrorDefaultText = 'Не удалось восстановить пароль. Попробуйте ещё раз';
 
@@ -54,51 +55,56 @@ export const ResetPasswordPage = () => {
         <form className={styles.formWrap} onSubmit={formSubmit}>
             <h3 className={styles.formTitle}>Восстановление пароля</h3>
 
-            {resultSuccess && <FormInfo type='success' text={defaultSuccessText}/>}
-
             {resetPasswordFailed && <FormInfo text={formErrorDefaultText} type='error'/>}
 
-            <PasswordInput
-                onChange={onPasswordChange}
-                value={password}
-                name={''}
-                extraClass="mb-6"
-                placeholder="Введите новый пароль"
-                required={true}
-            />
-            <Input
-                type={'text'}
-                placeholder={'Введите код из письма'}
-                onChange={onEmailCodeChange}
-                icon={false}
-                value={emailCode}
-                name={'emailCode'}
-                error={false}
-                errorText={'Ошибка'}
-                size={'default'}
-                extraClass="mb-6"
-                required={true}
-            />
+            {resultSuccess && <FormInfo type='success' text={defaultSuccessText}/>}
 
-            <Button 
-                htmlType="submit"
-                type="primary"
-                size="large"
-                >
-                Сохранить
-            </Button>
+            {!resultSuccess && (
+                <>
+                <PasswordInput
+                    onChange={onPasswordChange}
+                    value={password}
+                    name={''}
+                    extraClass="mb-6"
+                    placeholder="Введите новый пароль"
+                    required={true}
+                />
+                <Input
+                    type={'text'}
+                    placeholder={'Введите код из письма'}
+                    onChange={onEmailCodeChange}
+                    icon={false}
+                    value={emailCode}
+                    name={'emailCode'}
+                    error={false}
+                    errorText={'Ошибка'}
+                    size={'default'}
+                    extraClass="mb-6"
+                    required={true}
+                />
 
-            <div className={styles.formFooter}>
-                <div className={styles.formFooterLinkWrap}>
-                    <span>Вспомнили пароль?</span>
-                    <Link
-                        to='/login'
-                        className={styles.formFooterLink}
+                <Button 
+                    htmlType="submit"
+                    type="primary"
+                    size="large"
+                    disabled={isButtonDisabled}
                     >
-                        Войти
-                    </Link>
+                    Сохранить
+                </Button>
+
+                <div className={styles.formFooter}>
+                    <div className={styles.formFooterLinkWrap}>
+                        <span>Вспомнили пароль?</span>
+                        <Link
+                            to='/login'
+                            className={styles.formFooterLink}
+                        >
+                            Войти
+                        </Link>
+                    </div>
                 </div>
-            </div>
+                </>
+            )}
         </form>
     );
 }

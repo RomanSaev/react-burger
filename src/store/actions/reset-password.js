@@ -12,19 +12,15 @@ export const fetchForgotPassword = (email) => {
     return async function (dispatch) {
         try {
             dispatch({ type: FORGOT_PASSWORD_REQUEST })
-            const fetchData = await forgotPasswordRequest(email)
+            await forgotPasswordRequest(email)
 
-            if (fetchData?.success) {
-                dispatch({ type: FORGOT_PASSWORD_SUCCESS })
-                return true;
-            } else {
-                dispatch({ type: FORGOT_PASSWORD_FAILED })
-                throw new Error('')
-            }
+            dispatch({ type: FORGOT_PASSWORD_SUCCESS })
         }
         catch(e) {
             dispatch({ type: FORGOT_PASSWORD_FAILED })
-            throw new Error('forgot password fetch error')
+
+            //важно для корректной обработки в компоненте (не делать переход на след. шаг формы)
+            throw 'forgot password error'
         }
     }
 }
@@ -34,19 +30,15 @@ export const fetchResetPassword = (data) => {
 
         try {
             dispatch({ type: RESET_PASSWORD_REQUEST});
-            const fetchData = await resetPasswordRequest(data)
+            await resetPasswordRequest(data)
 
-            if (fetchData?.success) {
-                dispatch({ type: RESET_PASSWORD_SUCCESS });
-                return true;
-            } else {
-                dispatch({ type: RESET_PASSWORD_FAILED });
-                throw new Error('');
-            }
+            dispatch({ type: RESET_PASSWORD_SUCCESS });
         }
         catch(e) {
             dispatch({ type: RESET_PASSWORD_FAILED });
-            throw new Error('reset password fetch error');
+
+            //важно для корректной обработки в компоненте
+            throw 'reset password error'
         }
 
     }
