@@ -46,7 +46,7 @@ export function makeOrder(ingredientIds = []) {
         body: JSON.stringify({
             ingredients: ingredientIds
         })
-    }).then(response => response.json())
+    }).then(checkReponse)
 }
 
 export function forgotPasswordRequest(email) {
@@ -145,5 +145,5 @@ export function logoutRequest() {
         body: JSON.stringify({
             'token': localStorage.getItem('refreshToken')
         })
-    }).then(response => response.json())
+    }).then(checkReponse)
 }
