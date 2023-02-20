@@ -1,33 +1,22 @@
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchRegister } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
 import styles from './register.module.css';
+import { useForm } from "../hooks/useForm";
 
 export const RegisterPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-
+    const { form, handleChange, setForm } = useForm({
+        name: '',
+        email: '',
+        password: '',
+    })
     const {registerRequest, registerFailed} = useSelector(authSelector);
-
     const nameRef = useRef(null)
     const dispatch = useDispatch();
-
-    const onEmailChange = e => {
-        setEmail(e.target.value)
-    }
-
-    const onPasswordChange = e => {
-        setPassword(e.target.value)
-    }
-
-    const onNameChange = e => {
-        setName(e.target.value)
-    }
 
     const onNameIconClick = () => {
         setTimeout(() => nameRef.current.focus(), 0)
@@ -36,11 +25,11 @@ export const RegisterPage = () => {
     const formSubmit = (e) => {
         e.preventDefault();
 
-        if (password.length < 6 || email === '' || name === '') {
+        if (form.password.length < 6 || form.email === '' || form.name === '') {
             return false;
         }
 
-        dispatch(fetchRegister({ email, password, name }))
+        dispatch(fetchRegister(form))
     }
 
     const isButtonDisabled = registerRequest;
@@ -56,9 +45,9 @@ export const RegisterPage = () => {
             <Input
                 type={'text'}
                 placeholder={'Имя'}
-                onChange={onNameChange}
+                onChange={handleChange}
                 icon={false}
-                value={name}
+                value={form.name}
                 name={'name'}
                 error={false}
                 ref={nameRef}
@@ -68,8 +57,8 @@ export const RegisterPage = () => {
                 extraClass="mb-6"
             />
             <EmailInput 
-                onChange={onEmailChange}
-                value={email}
+                onChange={handleChange}
+                value={form.email}
                 name={'email'}
                 placeholder="E-mail"
                 isIcon={false}
@@ -77,8 +66,8 @@ export const RegisterPage = () => {
 
             />
             <PasswordInput 
-                onChange={onPasswordChange}
-                value={password}
+                onChange={handleChange}
+                value={form.password}
                 name={'password'}
                 extraClass="mb-6"
             />

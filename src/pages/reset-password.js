@@ -3,15 +3,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
+import { useForm } from "../hooks/useForm";
 import { fetchResetPassword } from "../store/actions/reset-password";
 import { resetPasswordSelector } from "../store/selectors";
 import styles from './reset-password.module.css'
 
 export const ResetPasswordPage = () => {
-    const [password, setPassword] = useState('');
-    const [emailCode, setEmailCode] = useState('');
+    const {form, handleChange, setForm} = useForm({
+        password: '',
+        emailCode: '',
+    })
     const [resultSuccess, setResultSuccess] = useState(false);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,23 +26,15 @@ export const ResetPasswordPage = () => {
 
     }, [location.state, navigate])
 
-    const onPasswordChange = e => {
-        setPassword(e.target.value)
-    }
-
-    const onEmailCodeChange = e => {
-        setEmailCode(e.target.value)
-    }
-
     const formSubmit = (e) => {
         e.preventDefault();
 
         setResultSuccess(false);
-        if (password.length < 6) {
+        if (form.password.length < 6) {
             return false;
         }
 
-        dispatch(fetchResetPassword({ password, emailCode }))
+        dispatch(fetchResetPassword(form))
             .then(() => {
                 setResultSuccess(true);
             })
@@ -62,9 +56,9 @@ export const ResetPasswordPage = () => {
             {!resultSuccess && (
                 <>
                 <PasswordInput
-                    onChange={onPasswordChange}
-                    value={password}
-                    name={''}
+                    onChange={handleChange}
+                    value={form.password}
+                    name={'password'}
                     extraClass="mb-6"
                     placeholder="Введите новый пароль"
                     required={true}
@@ -72,9 +66,9 @@ export const ResetPasswordPage = () => {
                 <Input
                     type={'text'}
                     placeholder={'Введите код из письма'}
-                    onChange={onEmailCodeChange}
+                    onChange={handleChange}
                     icon={false}
-                    value={emailCode}
+                    value={form.emailCode}
                     name={'emailCode'}
                     error={false}
                     errorText={'Ошибка'}

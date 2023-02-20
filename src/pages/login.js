@@ -1,35 +1,28 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
+import { useForm } from "../hooks/useForm";
 import { fetchLogin } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
 import styles from './login.module.css';
 
 export const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
+    const {form, handleChange, setForm} = useForm({
+        email: '',
+        password: '',
+    })
     const { loginRequest, loginFailed } = useSelector(authSelector);
-
     const dispatch = useDispatch();
-
-    const onEmailChange = e => {
-        setEmail(e.target.value)
-    }
-
-    const onPasswordChange = e => {
-        setPassword(e.target.value)
-    }
 
     const formSubmit = (e) => {
         e.preventDefault();
 
-        if (password.length < 6 || email === '') {
+        if (form.password.length < 6 || form.email === '') {
             return false;
         }
 
-        dispatch(fetchLogin({ email, password }))
+        dispatch(fetchLogin(form))
     }
 
     const isButtonDisabled = loginRequest;
@@ -43,8 +36,8 @@ export const LoginPage = () => {
             {loginFailed && <FormInfo text={formErrorDefaultText} type='error'/>}
 
             <EmailInput 
-                onChange={onEmailChange}
-                value={email}
+                onChange={handleChange}
+                value={form.email}
                 name={'email'}
                 placeholder="E-mail"
                 isIcon={false}
@@ -52,9 +45,9 @@ export const LoginPage = () => {
                 required={true}
             />
             <PasswordInput 
-                onChange={onPasswordChange}
-                value={password}
-                name={''}
+                onChange={handleChange}
+                value={form.password}
+                name={'password'}
                 extraClass="mb-6"
                 required={true}
             />
