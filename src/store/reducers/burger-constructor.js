@@ -1,4 +1,4 @@
-import { ADD_CONSTRUCTOR_ITEM, MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from "../actions/burger-constructor";
+import { ADD_CONSTRUCTOR_ITEM, MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM, RESET_CONSTRUCTOR_ITEMS } from "../actions/burger-constructor";
 
 const initialState = {
     bun: null,
@@ -45,6 +45,15 @@ export const burgerConstructorReducer = (state = initialState, action) => {
                 fillingIngredients: sortedFillingIngredients,
             }
         }
+
+        case RESET_CONSTRUCTOR_ITEMS: {
+            return {
+                ...state,
+                bun: null,
+                fillingIngredients: [ ...initialState.fillingIngredients ],
+            }
+        }
+
         default:
             return state;
     }

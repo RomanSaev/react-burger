@@ -6,6 +6,7 @@ import { makeOrderRequest } from '../../store/actions/order';
 import PropTypes from 'prop-types';
 import { authSelector, burgerConstructorSelector, orderSelector } from '../../store/selectors';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { RESET_CONSTRUCTOR_ITEMS } from '../../store/actions/burger-constructor';
 
 const TotalPanel = ({ price }) => {
     const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
@@ -30,6 +31,7 @@ const TotalPanel = ({ price }) => {
             dispatch(makeOrderRequest(selectedIngredientsIds))
                 .then(() => {
                     navigate('/order', { state: { background: location } })
+                    dispatch({ type: RESET_CONSTRUCTOR_ITEMS })
                 })
         }
     }
