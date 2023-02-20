@@ -4,22 +4,15 @@ import ReactDOM from 'react-dom';
 import styles from './modal.module.css'
 import PropTypes from 'prop-types';
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 const modalRoot = document.getElementById('modal');
 
-const Modal = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
+const Modal = ({ title, onClose, children }) => {
     
-    const closeModal = () => {
-        location?.state?.background && navigate(location.state.background)
-    }
-
     useEffect(() => {
         const keyCloseHandler = (e) => {
             if (e.key === 'Escape') {
-                closeModal();
+                onClose();
             }
         }
 
@@ -36,18 +29,19 @@ const Modal = (props) => {
                 <div className={styles.modal}>
                     <div className={styles.modalHeader}>
                         <div className={styles.modalHeaderTitle}>
-                            {props.title}
+                            {title}
                         </div>
                         <div className={styles.closeIcon}>
-                            <CloseIcon type="primary" onClick={() => closeModal()}/>
+                            <CloseIcon type="primary" onClick={onClose}/>
                         </div>
                     </div>
                     <div className={styles.modalBody}>
-                        {props.children}
+                        {children}
                     </div>
                 </div>
+                <ModalOverlay closeModal={onClose}/>
             </div>
-            <ModalOverlay closeModal={closeModal}/>
+            
         </>
         ),
         modalRoot
@@ -56,6 +50,8 @@ const Modal = (props) => {
 
 Modal.propTypes = {
     title: PropTypes.string,
+    onClose: PropTypes.func.isRequired,
+    children: PropTypes.element.isRequired,
 }
 
 Modal.defaultProps = {
