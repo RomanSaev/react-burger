@@ -10,11 +10,7 @@ export const fetchIngredients = () => {
             dispatch({ type: GET_INGREDIENTS_REQUEST})
             const fetchData = await getIngredients();
 
-            if (fetchData?.success && fetchData.data.length > 0) {
-                dispatch({ type: GET_INGREDIENTS_SUCCESS, payload: fetchData.data})
-            } else {
-                dispatch({ type: GET_INGREDIENTS_FAILED});
-            }
+            dispatch({ type: GET_INGREDIENTS_SUCCESS, payload: fetchData.data})
         }
         catch {
             dispatch({ type: GET_INGREDIENTS_FAILED});

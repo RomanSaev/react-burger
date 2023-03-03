@@ -1,32 +1,51 @@
-import react from 'react'
+import react, { useMemo } from 'react'
 import styles from './total-panel.module.css'
 import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
 import PropTypes from 'prop-types';
-import { burgerConstructorSelector, orderSelector } from '../../store/selectors';
+import { authSelector, burgerConstructorSelector, orderSelector } from '../../store/selectors';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { RESET_CONSTRUCTOR_ITEMS } from '../../store/actions/burger-constructor';
 
 const TotalPanel = ({ price }) => {
-
-    const { selectedIngredients } = useSelector(burgerConstructorSelector);
+    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const { orderRequest, orderFailed } = useSelector(orderSelector)
+    const { user } = useSelector(authSelector)
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+
+    const selectedIngredientsIds = useMemo (() => {
+        const ingredientIds = fillingIngredients.map(el => el._id);
+        if (bun) {
+            ingredientIds.push(bun._id)
+        }
+        return ingredientIds;
+    }, [bun, fillingIngredients])
 
     const makeOrderClickHandle = () => {
-        dispatch(makeOrderRequest(selectedIngredients));
+        if (!user.isLogged) {
+            navigate('/login')
+        } else {
+            dispatch(makeOrderRequest(selectedIngredientsIds))
+                .then(() => {
+                    //открываем попап только в случае успешного создания заказа
+                    navigate('/order', { state: { background: location } })
+                    dispatch({ type: RESET_CONSTRUCTOR_ITEMS })
+                })
+                .catch(err => {})
+        }
     }
 
     return (
+        <>
         <div className={`${styles.totalWrap} mt-10 mb-10 pr-4`}>
             {orderRequest && 
                 <span className={styles.makeOrderLoadingInfo}>Оформляем заказ, подождите...</span>
             }
 
-            {orderFailed && 
-                <span className={styles.makeOrderLoadingError}>Ошибка при оформлении заказа</span>
-            }
-
-            {!orderRequest && !orderFailed &&
+            {!orderRequest &&
                 <>
                     {price > 0 && <div className={styles.priceWrap}>
                         {<span>{price}</span>}
@@ -45,6 +64,11 @@ const TotalPanel = ({ price }) => {
                 </>
             }
         </div>
+
+        {orderFailed && 
+            <div className={styles.makeOrderLoadingError}>Ошибка при оформлении заказа</div>
+        }
+        </>
     )
 }
 

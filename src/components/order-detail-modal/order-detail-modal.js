@@ -1,20 +1,25 @@
 import react from 'react'
-import styles from './order-detail-modal.module.css'
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import PropTypes from 'prop-types';
 import { orderShapePropType } from '../../prop-types';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const OrderDetailModal = ({ order, closeModal }) => {
+const OrderDetailModal = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        location?.state?.background && navigate(location.state.background)
+    }
+
     return (
-        <Modal closeModal={closeModal}>
-            <OrderDetails order={order}/>
+        <Modal onClose={closeModal}>
+            <OrderDetails />
         </Modal>
     );
 }
 
 OrderDetailModal.propTypes = {
-    closeModal: PropTypes.func.isRequired,
     order: orderShapePropType,
 }
 

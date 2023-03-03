@@ -1,0 +1,12 @@
+.profileForm{
+    width: 480px;
+    max-width: 480px;
+    margin-left: 60px;
+}
+
+.formBtnPanel{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+}

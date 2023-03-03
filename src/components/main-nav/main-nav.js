@@ -5,15 +5,13 @@ import MainNavItem from '../main-nav-item/main-nav-item'
 const MainNav = () => {
     const mainNavData = [
         {
-            active: true,
             iconType: 'burger',
             href: '/',
             txt: 'Конструктор',
         },
         {
-            active: false,
             iconType: 'list',
-            href: '/',
+            href: '/orders-feed',
             txt: 'Лента заказов',
         }
     ]
@@ -23,7 +21,6 @@ const MainNav = () => {
                 <MainNavItem
                     className={styles.rightNav}
                     key={index}
-                    active={navItem.active}
                     iconType={navItem.iconType}
                     href={navItem.href}
                     txt={navItem.txt}

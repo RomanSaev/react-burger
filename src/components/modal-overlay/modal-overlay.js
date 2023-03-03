@@ -6,7 +6,7 @@ const ModalOverlay = ({ closeModal }) => {
     return (
         <div 
             className={styles.overlay}
-            onClick={() => closeModal()}
+            onClick={closeModal}
         ></div>
     )
 }

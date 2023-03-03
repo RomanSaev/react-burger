@@ -2,17 +2,15 @@ import react, { useEffect, useMemo, useRef } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import IngredientDetailModal from '../ingredient-detail-modal/ingredient-detail-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { HIDE_INGREDIENT_DETAIL_MODAL, SHOW_INGREDIENT_DETAIL_MODAL } from '../../store/actions/ingredient-detail';
 import { useInView } from 'react-intersection-observer';
 import { SET_BROWSED_CATEGORY } from '../../store/actions/ingredient-detail';
 import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelector } from '../../store/selectors';
 
 const BurgerIngredients = () => {
     const { ingredients } = useSelector(ingredientsSelector);
-    const { selectedCounts } = useSelector(burgerConstructorSelector);
-    const { selectedIngredient, isIngrDetailModalShowing, browsedCategory } = useSelector(ingredientDetailSelector)
+    const burgerConstructor = useSelector(burgerConstructorSelector);
+    const { browsedCategory } = useSelector(ingredientDetailSelector)
     const dispatch = useDispatch();
 
     const useInViewParams = { threshold: 0.2 }; //для более плавной смены активной просматриваемой категории
@@ -66,21 +64,18 @@ const BurgerIngredients = () => {
         refHeader: refMain,
     })
 
-    const closeIngredientDetailModal = () => {
-        dispatch({ type: HIDE_INGREDIENT_DETAIL_MODAL });
-    }
-
-    const openIngredientDetailModal = (ingredient) => {
-        dispatch({ type: SHOW_INGREDIENT_DETAIL_MODAL, payload: ingredient });
-    }
+    const ingredientsCounters = useMemo(() => {
+        const counters = {};
+        burgerConstructor.fillingIngredients.forEach( ingredient => {
+            if (!counters[ingredient._id]) counters[ingredient._id] = 0;
+            counters[ingredient._id]++;
+        })
+        if (burgerConstructor.bun) counters[burgerConstructor.bun._id] = 2;
+        return counters;
+    }, [burgerConstructor])
 
     return (
         <section>
-            {isIngrDetailModalShowing && 
-                <IngredientDetailModal
-                    closeModal={closeIngredientDetailModal}
-                    ingredient={selectedIngredient}
-                />}
             <div style={{ display: 'flex' }}>
                 <Tab value='bun' active={browsedCategory === 'bun'} onClick={() => onTabClick(refBun)}>
                     Булки
@@ -98,13 +93,12 @@ const BurgerIngredients = () => {
                         <h3 ref={categoryData.refHeader} className={`${styles.categoryName} mt-10`}>{categoryData.title}</h3>
                         <div className={`${styles.categoryItemsWrap} pl-4`}>
                             {categoryData.ingredients.map(ingredient => {
-                                const ingredientCount = selectedCounts[`id${ingredient._id}`];
+                                const ingredientCount = ingredientsCounters[ingredient._id];
                                 const count = typeof ingredientCount !== 'undefined' && ingredientCount > 0 ? ingredientCount : 0;
                                 return <BurgerIngredient 
                                     key={ingredient._id} 
                                     ingredientData={ingredient}
                                     selectedCount={count}
-                                    openModal={openIngredientDetailModal}
                                 />
                             })}
                         </div>

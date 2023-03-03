@@ -1,21 +1,21 @@
 import react from 'react'
-import styles from './ingredient-detail-modal.module.css'
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import PropTypes from 'prop-types';
-import { ingredientShapePropType } from '../../prop-types';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const IngredientDetailModal = ({ closeModal, ingredient }) => {
+const IngredientDetailModal = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        location?.state?.background && navigate(location.state.background)
+    }
+
     return (
-        <Modal closeModal={closeModal} title='Детали ингредиента'>
-            <IngredientDetails ingredient={ingredient}/>
+        <Modal title='Детали ингредиента' onClose={closeModal}>
+            <IngredientDetails />
         </Modal>
     );
-}
-
-IngredientDetailModal.propTypes = {
-    closeModal: PropTypes.func.isRequired,
-    ingredient: ingredientShapePropType.isRequired,
 }
 
 export default IngredientDetailModal

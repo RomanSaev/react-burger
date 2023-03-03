@@ -7,8 +7,6 @@
     top:0;
     width:100%;
     height:100%;
-    z-index: 51;
-    pointer-events: none;
 }
 .modal {
     width: 720px;
@@ -19,6 +17,7 @@
     border-radius: 40px;
     position: relative;
     padding-bottom: 60px;
+    z-index: 51;
 }
 .modalHeader {
     min-height: 64px;

@@ -3,18 +3,15 @@ import styles from './burger-constructor.module.css'
 import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fixed'
 import ConstructorItem from '../constructor-item/constructor-item'
 import TotalPanel from '../total-panel/total-panel'
-import OrderDetailModal from '../order-detail-modal/order-detail-modal'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
 import { useDispatch, useSelector } from 'react-redux'
-import { HIDE_ORDER_DETAIL_MODAL } from '../../store/actions/order'
-import { ADD_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor'
+import { addToConstructor } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
 import { getTotalBurgerPrice } from '../../utils/functions-helper'
-import { burgerConstructorSelector, orderSelector } from '../../store/selectors'
+import { burgerConstructorSelector } from '../../store/selectors'
 
 const BurgerConstructor = () => {
-    const { selectedIngredients } = useSelector(burgerConstructorSelector);
-    const { order, isOrderDetailModalShowing } = useSelector(orderSelector);
+    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
     const dispatch = useDispatch();
 
     const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState('');//храним подсветку блоков пустого бургера в локальном состоянии
@@ -22,7 +19,7 @@ const BurgerConstructor = () => {
     const [{}, dropTarget] = useDrop({
         accept: 'ingredient',
         drop(item) {
-            dispatch({ type: ADD_CONSTRUCTOR_ITEM, payload: item})
+            dispatch(addToConstructor(item))
             setEmptyBurgerHoverType('');
         },
         hover(item) {
@@ -34,27 +31,14 @@ const BurgerConstructor = () => {
         setEmptyBurgerHoverType(item.type)
     }
 
-    const closeOrderDetailModal = () => {
-       dispatch({ type: HIDE_ORDER_DETAIL_MODAL });
-    }
-
-    const bunIngredient = selectedIngredients.find(el => el.type === 'bun')
-    const selectedFillingIngredients = selectedIngredients.filter(el => el.type !== 'bun');
-
     const totalPrice = useMemo(()=> {
-        return getTotalBurgerPrice(selectedIngredients);
-     }, [selectedIngredients]);
+        return getTotalBurgerPrice(bun, fillingIngredients);
+     }, [bun, fillingIngredients]);
 
     return (
         <section className={'pl-4'} ref={dropTarget}>
-            {isOrderDetailModalShowing && 
-                <OrderDetailModal
-                    order={order}
-                    closeModal={closeOrderDetailModal}
-                />}
-
-            {bunIngredient
-                ? <ConstructorItemFixed ingredientData={bunIngredient} type='top'/>
+            {bun
+                ? <ConstructorItemFixed ingredientData={bun} type='top'/>
                 : <ConstructorItemEmpty
                     type='top'
                     text='Выберите булку'
@@ -63,8 +47,8 @@ const BurgerConstructor = () => {
             }
             
             <div className={`${styles.constructorList} mt-4 mb-4 pr-2`}>
-                {selectedFillingIngredients.length > 0
-                    ? selectedFillingIngredients.map((el, index) => {
+                {fillingIngredients.length > 0
+                    ? fillingIngredients.map((el, index) => {
                         return <ConstructorItem
                             key={el.uuid}
                             ingredientData={el}
@@ -79,8 +63,8 @@ const BurgerConstructor = () => {
                 }
             </div>
 
-            {bunIngredient
-                ? <ConstructorItemFixed ingredientData={bunIngredient} type='bottom'/>
+            {bun
+                ? <ConstructorItemFixed ingredientData={bun} type='bottom'/>
                 : <ConstructorItemEmpty
                     type='bottom'
                     text='Выберите булку'

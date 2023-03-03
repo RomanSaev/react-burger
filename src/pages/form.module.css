@@ -1,0 +1,48 @@
+.formWrap {
+    width: 480px;
+    max-width: 480px;
+    margin: 180px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.formTitle {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #F2F2F3;
+    margin-bottom: 24px;
+}
+.formFooter {
+    margin-top: 80px;
+}
+.formFooterLinkWrap {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.formFooterLinkWrap:last-child {
+    margin-bottom: 0px;
+}
+
+.formFooterLinkWrap > span{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #8585AD;
+}
+
+.formFooterLink {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4C4CFF;
+    text-decoration: none;
+}
+
+.formFooterLink:active, .formFooterLink:hover, .formFooterLink:visited {
+    text-decoration: none;
+}
