@@ -1,5 +1,5 @@
 import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
-import { TIngredient, TUserUpdateData } from '../types';
+import { TIngredient, TLoginForm, TRegisterForm, TResetPasswordForm, TUserUpdateData } from '../types';
 import { getCookie, saveTokens } from './functions-helper';
 
 type TServerResponse<T> = {
@@ -64,22 +64,6 @@ type TErrorResponse = TServerResponse<{
 }>
 
 
-type TResetPasswordForm = {
-    password: string;
-    emailCode: string;
-}
-
-type TRegisterForm = {
-    password: string;
-    email: string;
-    name: string;
-}
-
-type TLoginForm = {
-    password: string;
-    email: string;
-}
-
 const checkReponse = async <T>(res: Response): Promise<T> => {
     if (!res.ok) throw `Ошибка ${res.status}`
     return await res.json()
@@ -135,7 +119,8 @@ export const makeOrder = async (ingredientIds: string[]): Promise<TOrderResponse
     return await request<TOrderResponse>(ENDPOINT_MAKE_ORDER, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            Authorization: 'Bearer ' + getCookie('accessToken')
         },
         body: JSON.stringify({
             ingredients: ingredientIds

@@ -1,11 +1,13 @@
-export const ingredientsSelector = (state: any) => state.ingredients;
+import { RootState } from "../types/store";
 
-export const burgerConstructorSelector = (state: any) => state.burgerConstructor;
+export const ingredientsSelector = (state: RootState) => state.ingredients;
 
-export const ingredientDetailSelector = (state: any) => state.ingredientDetail;
+export const burgerConstructorSelector = (state: RootState) => state.burgerConstructor;
 
-export const orderSelector = (state: any) => state.order;
+export const ingredientDetailSelector = (state: RootState) => state.ingredientDetail;
 
-export const resetPasswordSelector = (state: any) => state.resetPassword;
+export const orderSelector = (state: RootState) => state.order;
 
-export const authSelector = (state: any) => state.auth;
+export const resetPasswordSelector = (state: RootState) => state.resetPassword;
+
+export const authSelector = (state: RootState) => state.auth;

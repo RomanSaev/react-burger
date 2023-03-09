@@ -65,3 +65,34 @@ export type TUserUpdateData = {
     email?: string;
     password?: string;
 };
+
+export type TUser = {
+    name: string;
+    email: string;
+    password?: string;
+}
+
+export type TIngredientMoveData = {
+    from: number;
+    to: number;
+}
+
+export type TOrder = {
+    number: number;
+}
+
+export type TResetPasswordForm = {
+    password: string;
+    emailCode: string;
+}
+
+export type TRegisterForm = {
+    password: string;
+    email: string;
+    name: string;
+}
+
+export type TLoginForm = {
+    password: string;
+    email: string;
+}

@@ -1,6 +1,53 @@
-import { AUTH_CHECKED, GET_USER_FAILED, GET_USER_REQUEST, GET_USER_SUCCESS, LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, REGISTER_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, USER_PATCH_FAILED, USER_PATCH_REQUEST, USER_PATCH_SUCCESS, USER_SET, USER_UPDATE } from "../actions/auth";
+import {
+    REGISTER_REQUEST,
+    REGISTER_SUCCESS,
+    REGISTER_FAILED,
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
+    LOGIN_FAILED,
+    LOGOUT_REQUEST,
+    LOGOUT_SUCCESS,
+    LOGOUT_FAILED,
+    GET_USER_REQUEST,
+    GET_USER_SUCCESS,
+    GET_USER_FAILED,
+    USER_SET,
+    USER_PATCH_REQUEST,
+    USER_PATCH_SUCCESS,
+    USER_PATCH_FAILED,
+    USER_UPDATE,
+    AUTH_CHECKED,
+} from "../actions/actionTypes";
+import { TAuthActions } from "../actions/auth";
 
-const initialState = {
+export type TAuthState = {
+    registerRequest: boolean;
+    registerFailed: boolean;
+
+    loginRequest: boolean;
+    loginFailed: boolean;
+
+    logoutRequest: boolean;
+    logoutFailed: boolean; 
+
+    getUserRequest: boolean;
+    getUserFailed: boolean;
+
+    patchUserRequest: boolean;
+    patchUserSuccess: boolean;
+    patchUserFailed: boolean;
+
+    authChecked: boolean;
+
+    user: {
+        name: string;
+        email: string;
+        password: string;
+        isLogged: boolean;
+    },
+}
+
+const initialState: TAuthState = {
     registerRequest: false,
     registerFailed: false,
 
@@ -27,7 +74,7 @@ const initialState = {
     },
 }
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action: TAuthActions): TAuthState => {
     switch(action.type) {
         case REGISTER_REQUEST: {
             return {

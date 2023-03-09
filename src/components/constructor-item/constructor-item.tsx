@@ -1,11 +1,12 @@
 import { FC, useRef } from 'react'
 import styles from './constructor-item.module.css'
 import { DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch } from 'react-redux';
-import { MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor';
+// import { MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from '../../store/actions/burger-constructor';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { TConstructorIngredient } from '../../types';
 import { Identifier } from 'typescript';
+import { MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM } from '../../store/actions/actionTypes';
+import { useAppDispatch } from '../../hooks/store';
 
 type ConstructorItemProps = {
     ingredientData: TConstructorIngredient;
@@ -18,7 +19,7 @@ type DragItem = {
 };
 
 const ConstructorItem: FC<ConstructorItemProps> = ({ ingredientData, index }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const ref = useRef<HTMLDivElement>(null)
     const [{isDragging}, dragRef] = useDrag({

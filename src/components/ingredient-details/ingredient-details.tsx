@@ -1,10 +1,10 @@
 import { FC, useEffect } from 'react'
 import styles from './ingredient-details.module.css'
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { ingredientsSelector } from '../../store/selectors';
-import { INGREDIENT_DETAIL_SET } from '../../store/actions/ingredient-detail';
 import { TIngredient } from '../../types';
+import { INGREDIENT_DETAIL_SET } from '../../store/actions/actionTypes';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 type TConsistItem = {
     title: string;
@@ -12,10 +12,10 @@ type TConsistItem = {
 };
 
 const IngredientDetails: FC = () => {
-    const { ingredients } = useSelector(ingredientsSelector);
-    const dispatch = useDispatch();
+    const { ingredients } = useAppSelector(ingredientsSelector);
+    const dispatch = useAppDispatch();
     const { id: ingredientId } = useParams();
-    const ingredient: TIngredient | null = ingredients.length ? ingredients.find((el: TIngredient)=> el._id === ingredientId) : null;
+    const ingredient: TIngredient | null | undefined = ingredients.length ? ingredients.find((el: TIngredient)=> el._id === ingredientId) : null;
     
     useEffect(() => {
         if (ingredient) {

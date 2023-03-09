@@ -1,9 +1,8 @@
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, FormEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Dispatch } from "redux";
 import { FormInfo } from "../components/form-info/form-info";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { useForm } from "../hooks/useForm";
 import { fetchLogin } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
@@ -15,8 +14,8 @@ export const LoginPage: FC = () => {
         email: '',
         password: '',
     })
-    const { loginRequest, loginFailed } = useSelector(authSelector);
-    const dispatch: Dispatch<any> = useDispatch();
+    const { loginRequest, loginFailed } = useAppSelector(authSelector);
+    const dispatch = useAppDispatch();
 
     const formSubmit = (e: FormEvent) => {
         e.preventDefault();

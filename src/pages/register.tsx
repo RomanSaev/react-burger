@@ -1,14 +1,13 @@
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, FormEvent, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FormInfo } from "../components/form-info/form-info";
 import { fetchRegister } from "../store/actions/auth";
 import { authSelector } from "../store/selectors";
 import styles from './register.module.css';
 import { useForm } from "../hooks/useForm";
-import { Dispatch } from "redux";
 import { FormInfoTypes } from "../types";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
 
 export const RegisterPage: FC = () => {
     const { form, handleChange, } = useForm({
@@ -16,9 +15,9 @@ export const RegisterPage: FC = () => {
         email: '',
         password: '',
     })
-    const {registerRequest, registerFailed} = useSelector(authSelector);
+    const {registerRequest, registerFailed} = useAppSelector(authSelector);
     const nameRef = useRef<HTMLInputElement>(null)
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useAppDispatch()
 
     const onNameIconClick = () => {
         setTimeout(() => {

@@ -1,9 +1,8 @@
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Dispatch } from "redux";
 import { FormInfo } from "../components/form-info/form-info";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { useForm } from "../hooks/useForm";
 import { fetchResetPassword } from "../store/actions/reset-password";
 import { resetPasswordSelector } from "../store/selectors";
@@ -16,10 +15,10 @@ export const ResetPasswordPage: FC = () => {
         emailCode: '',
     })
     const [resultSuccess, setResultSuccess] = useState<boolean>(false);
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location: TUseLocation = useLocation();
-    const { resetPasswordRequest, resetPasswordFailed } = useSelector(resetPasswordSelector)
+    const { resetPasswordRequest, resetPasswordFailed } = useAppSelector(resetPasswordSelector)
 
     useEffect(() => {
         if (!location.state || !location.state.resetPassword) {

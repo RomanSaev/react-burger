@@ -1,14 +1,14 @@
 import { FC } from 'react'
 import { DndProvider } from 'react-dnd';
-import { useSelector } from 'react-redux'
 import BurgerConstructor from '../components/burger-constructor/burger-constructor';
 import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
 import { ingredientsSelector } from '../store/selectors';
 import styles from './burger-constructor.module.css'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useAppSelector } from '../hooks/store';
 
 export const BurgerConstructorPage: FC = () => {
-    const { ingredients } = useSelector(ingredientsSelector);
+    const { ingredients } = useAppSelector(ingredientsSelector);
    
     return (
         <>

@@ -10,7 +10,7 @@ import { TIngredient } from "../types";
 export const IngredientDetailPage: FC = () => {
     const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(ingredientsSelector);
     const {id: ingredientId} = useParams();
-    let ingredient: TIngredient | null = ingredients.length ? ingredients.find((el: TIngredient ) => el._id === ingredientId) : null;
+    let ingredient: TIngredient | null | undefined = ingredients.length ? ingredients.find((el: TIngredient ) => el._id === ingredientId) : null;
     const [ingredientExists, setIngredientExists] = useState<boolean>(true)
 
     useEffect(() => {

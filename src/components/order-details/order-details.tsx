@@ -1,14 +1,14 @@
 import { FC } from 'react'
 import styles from './order-details.module.css'
-import { useSelector } from 'react-redux';
 import { orderSelector } from '../../store/selectors';
+import { useAppSelector } from '../../hooks/store';
 
 type TOrderTextByStatus = {
     orderBegin: string;
 };
 
 const OrderDetails: FC = () => {
-    const { order } = useSelector(orderSelector);
+    const { order } = useAppSelector(orderSelector);
     const orderTextByStatus: TOrderTextByStatus = {
         orderBegin: 'Ваш заказ начали готовить'
     }
