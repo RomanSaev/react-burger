@@ -24,8 +24,11 @@ type TApplicationActions = TAuthActions
 
 // Типизация thunk'ов в нашем приложении
 export type AppThunk<TReturn = void> = ActionCreator<
-  ThunkAction<TReturn, RootState, never, TApplicationActions>
+  ThunkAction<Promise<TReturn>, RootState, never, TApplicationActions>
 >;
+// export type AppThunk<TReturn = void> = ActionCreator<
+//   ThunkAction<TReturn, RootState, never, TApplicationActions>
+// >;
 // export type AppThunk<TReturn = void> = ActionCreator<
 //   ThunkAction<TReturn, Action, RootState, TApplicationActions>
 // >;

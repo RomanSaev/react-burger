@@ -25,7 +25,7 @@ export const ForgotPasswordPage: FC = () => {
     const formSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        (dispatch(fetchForgotPassword(email)) as any)
+        dispatch(fetchForgotPassword(email))
             .then(() => { 
                 navigateToResetPswrd()
             })

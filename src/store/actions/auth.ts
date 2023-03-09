@@ -224,7 +224,7 @@ export const updateUser: AppThunk = (data: TUserUpdateData) => {
 export const checkUserAuth: AppThunk = () => {
     return async (dispatch: AppDispatch ) => {
         if(getCookie('accessToken')) {
-            (dispatch(getUser()) as any).finally(() => {
+            dispatch(getUser()).finally(() => {
                 dispatch({ type: AUTH_CHECKED })
             })
         } else {

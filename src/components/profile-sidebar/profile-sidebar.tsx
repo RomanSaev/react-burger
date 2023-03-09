@@ -18,7 +18,7 @@ export const ProfileSidebar: FC = () => {
 
         if (logoutRequest) return;
 
-        (dispatch(fetchLogout()) as any)
+        dispatch(fetchLogout())
             .then(() => {
                 navigate('/login')
             })

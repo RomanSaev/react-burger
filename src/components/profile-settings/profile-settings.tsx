@@ -56,7 +56,7 @@ export const ProfileSettings: FC = () => {
         if (email !== user.email) patchData.email = email;
         if (password !== '') patchData.password = password;
 
-        (dispatch(updateUser(patchData)) as any)
+        dispatch(updateUser(patchData))
             .then(() => {
                 setDataChanged(false);
             })

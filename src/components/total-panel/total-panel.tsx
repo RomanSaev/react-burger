@@ -32,7 +32,7 @@ const TotalPanel: FC<TotalPanelProps> = ({ price }) => {
         if (!user.isLogged) {
             navigate('/login')
         } else {
-            (dispatch(makeOrderRequest(selectedIngredientsIds)) as any)
+            dispatch(makeOrderRequest(selectedIngredientsIds))
             .then(() => {
                 //открываем попап только в случае успешного создания заказа
                 navigate('/order', { state: { background: location } })

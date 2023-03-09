@@ -35,7 +35,7 @@ export const ResetPasswordPage: FC = () => {
             return false;
         }
 
-        (dispatch(fetchResetPassword(form)) as any)
+        dispatch(fetchResetPassword(form))
             .then(() => {
                 setResultSuccess(true);
             })
