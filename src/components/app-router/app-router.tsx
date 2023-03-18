@@ -9,6 +9,9 @@ import OrderDetailModal from '../order-detail-modal/order-detail-modal'
 import { NotFound } from '../../pages/not-found'
 import { TUseLocation } from '../../types'
 import { FC } from 'react'
+import { OrdersHistory } from '../orders-history/orders-history'
+import { OrderPage } from '../../pages/order-page'
+import OrderViewModal from '../order-view-modal/order-view-modal'
 
 export const AppRouter: FC = () => {
     const location: TUseLocation = useLocation();
@@ -18,7 +21,7 @@ export const AppRouter: FC = () => {
         <>
             <Routes location={background || location}>
                 <Route path="/" element={<BurgerConstructorPage />} />
-                <Route path="/orders-feed" element={<OrderFeedPage />} />
+                <Route path="/feed" element={<OrderFeedPage />} />
                 <Route 
                     path="/login"
                     element={<ProtectedRoute onlyUnAuth={true}><LoginPage /></ProtectedRoute>}
@@ -35,10 +38,14 @@ export const AppRouter: FC = () => {
                     path="/reset-password"
                     element={<ProtectedRoute onlyUnAuth={true}><ResetPasswordPage /></ProtectedRoute>} 
                 />
+
                 <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}>
                     <Route index element={<ProfileSettings />} />
-                    <Route path="orders" element={<p>Orders</p>}/>
+                    <Route path="orders" element={<OrdersHistory />}/>
                 </Route>
+
+                <Route path="/profile/orders/:id" element={<OrderPage />} />
+                <Route path="/feed/:id" element={<OrderPage />} />
 
                 <Route path="/ingredients/:id" element={<IngredientDetailPage />} />
                 <Route path="*" element={<NotFound />} />
@@ -48,6 +55,8 @@ export const AppRouter: FC = () => {
                 <Routes>
                     <Route path="/ingredients/:id" element={<IngredientDetailModal />} />
                     <Route path="/order" element={<OrderDetailModal />} />
+                    <Route path="/profile/orders/:id" element={<OrderViewModal />} />
+                    <Route path="/feed/:id" element={<OrderViewModal />} />
                 </Routes>
             )}
         </>

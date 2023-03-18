@@ -8,7 +8,7 @@ import { MainNavIconTypes } from '../../types'
 
 const AppHeader: FC = () => {
     return (
-        <header className={`${styles.header} pt-6 pb-6`}>
+        <header className={`${styles.header} pt-4 pb-4`}>
             <div className={styles.header_inner}>
                 <MainNav />
                 <Link to='/' className={styles.logoWrap}>

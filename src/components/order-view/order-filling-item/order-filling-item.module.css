@@ -1,0 +1,62 @@
+.wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.imgItem {
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%), linear-gradient(0deg, #131316, #131316);
+    border-radius: 100px;
+    display: flex;
+    height: 64px;
+    width: 64px;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgItemInner {
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border-radius: 100%;
+    background: #131316;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.img {
+    width: 112px;
+    height: 56px;
+}
+
+.name {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #F2F2F3;
+    width: 100%;
+}
+
+.priceWrap {
+    display: flex;
+    align-items: center;
+    text-align: right;
+    gap: 8px;
+}
+
+.price {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    color: #F2F2F3;
+    font-family: 'Iceland', Arial, sans-serif;
+    white-space: nowrap;
+}

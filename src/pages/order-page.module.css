@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 80px;
+    justify-content: center;
+}
+
+.header {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    color: #F2F2F3;
+    font-family: 'Iceland', Arial, sans-serif;
+}

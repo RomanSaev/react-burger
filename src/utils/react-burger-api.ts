@@ -1,5 +1,5 @@
-import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
-import { TIngredient, TLoginForm, TRegisterForm, TResetPasswordForm, TUserUpdateData } from '../types';
+import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
+import { TIngredient, TLoginForm, TOrderData, TRegisterForm, TResetPasswordForm, TUserUpdateData } from '../types';
 import { getCookie, saveTokens } from './functions-helper';
 
 type TServerResponse<T> = {
@@ -10,7 +10,7 @@ type TIngredientsResponse = TServerResponse<{
     data: TIngredient[]
 }>
 
-type TOrderResponse = TServerResponse<{
+type TMakeOrderResponse = TServerResponse<{
     name: string;
     order: {
         number: number;
@@ -57,6 +57,10 @@ type TRefreshResponse = TServerResponse<{
 
 type TLogoutResponse = TServerResponse<{
     message: string
+}>
+
+type TGetOrderResponse = TServerResponse<{
+    orders: TOrderData[];
 }>
 
 type TErrorResponse = TServerResponse<{
@@ -115,8 +119,8 @@ export const fetchWithRefresh = async <T>(url: RequestInfo, options: RequestInit
   };
 
 //создание заказа
-export const makeOrder = async (ingredientIds: string[]): Promise<TOrderResponse> => {
-    return await request<TOrderResponse>(ENDPOINT_MAKE_ORDER, {
+export const makeOrder = async (ingredientIds: string[]): Promise<TMakeOrderResponse> => {
+    return await request<TMakeOrderResponse>(ENDPOINT_MAKE_ORDER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -234,5 +238,15 @@ export const logoutRequest = async (): Promise<TLogoutResponse> => {
         body: JSON.stringify({
             'token': localStorage.getItem('refreshToken')
         })
+    })
+}
+
+//запрос данных о заказе
+export const getOrderRequest = async (orderNumber: number): Promise<TGetOrderResponse> => {
+    return await request<TGetOrderResponse>(`${ENDPOINT_ORDER}/${orderNumber}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
     })
 }

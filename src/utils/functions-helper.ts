@@ -1,6 +1,7 @@
-import { TConstructorIngredient } from "../types";
+import { ORDER_CREATED_STATUS, ORDER_DONE_STATUS, ORDER_PENDING_STATUS } from "../constants";
+import { OrderStatusTypes, TConstructorIngredient, TIngredient, TOrderData } from "../types";
 
-export const getTotalBurgerPrice = (bun: TConstructorIngredient | null, fillingIngredients: TConstructorIngredient[]) => {
+export const getTotalBurgerPrice = (bun: TConstructorIngredient | TIngredient | null | undefined, fillingIngredients: (TConstructorIngredient | TIngredient)[]) => {
     let resultPrice = 0;
     if (bun) {
         resultPrice += bun.price * 2;
@@ -61,4 +62,22 @@ export function deleteCookie(name: string) {
 export const saveTokens = (accessToken: string, refreshToken: string) => {
   setCookie('accessToken', accessToken);
   localStorage.setItem('refreshToken', refreshToken);
+}
+
+export const numberWithSpaces = (nr: number) => {
+	return nr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+export const getOrderStatusStr = (order: TOrderData) => {
+  switch (order.status) {
+    case OrderStatusTypes.Created: {
+        return ORDER_CREATED_STATUS;
+    }
+    case OrderStatusTypes.Pending: {
+        return ORDER_PENDING_STATUS;
+    }
+    case OrderStatusTypes.Done: {
+        return ORDER_DONE_STATUS;
+    }
+  }
 }

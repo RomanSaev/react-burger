@@ -6,10 +6,10 @@ import styles from './profile.module.css'
 export const ProfilePage: FC = () => {
     return (
         <main className={styles.profileMainContent}>
-            <section>
+            <section className={styles.sidebar}>
                 <ProfileSidebar />
             </section>
-            <section>
+            <section className={styles.content}>
                 <Outlet />
             </section>
         </main>

@@ -75,6 +75,7 @@ export const ProfileSettings: FC = () => {
     const formSuccessDefaultText = 'Данные успешно изменены';
 
     return (
+        <div className={'pt-20'}>
         <form className={styles.profileForm} onSubmit={submitForm}>
 
             {patchUserFailed && <FormInfo text={formErrorDefaultText} type={FormInfoTypes.Error}/>}
@@ -136,5 +137,6 @@ export const ProfileSettings: FC = () => {
             </div>
 
         </form>
+        </div>
     );
 }

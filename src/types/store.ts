@@ -7,6 +7,7 @@ import { TIngredientDetailActions } from "../store/actions/ingredient-detail";
 import { TIngredientsActions } from "../store/actions/ingredients";
 import { TOrderActions } from "../store/actions/order";
 import { TResetPasswordActions } from "../store/actions/reset-password";
+import { TViewOrderActions } from "../store/actions/view-order";
 import { rootReducer } from "../store/reducers";
 
 const store = configureStore();
@@ -20,7 +21,8 @@ type TApplicationActions = TAuthActions
     | TIngredientDetailActions
     | TIngredientsActions
     | TOrderActions
-    | TResetPasswordActions;
+    | TResetPasswordActions
+    | TViewOrderActions;
 
 // Типизация thunk'ов в нашем приложении
 export type AppThunk<TReturn = void> = ActionCreator<
