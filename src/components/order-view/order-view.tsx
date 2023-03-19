@@ -28,7 +28,7 @@ export const OrderView: FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (!order && !getOrderRequest) {
+        if (!getOrderRequest) {
             dispatch(getOrder(id));
         }
     }, [id]);
@@ -55,7 +55,6 @@ export const OrderView: FC = () => {
             order.ingredients.forEach((_id) => {
                 const ingredient = ingredients.find( el => el._id === _id);
                 if (ingredient) {
-                    // counters[ingredient._id] = 3;
                     if (ingredient.type === 'bun') {
                         counters[ingredient._id] = 2;
                     } else if (!counters[ingredient._id]){

@@ -114,3 +114,11 @@ export type TOrderData = {
     owner?: string; //?
     _v?: number;
 }
+
+export type TOrdersFeed = {
+    orders: TOrderData[]
+    total: number
+    totalToday: number
+}
+
+export type TOrdersHistory = TOrdersFeed;

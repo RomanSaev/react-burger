@@ -52,7 +52,7 @@ export const OrderCard: FC<TOrderCardProps> = ({ order, withStatus, itemUrl }) =
     return (
         <li className={styles.orderListItem}>
             <Link
-                to={`${itemUrl}/${order._id}`}
+                to={`${itemUrl}/${order.number}`}
                 state={{ background: location }}
                 className={styles.orderListItemLink}
             >

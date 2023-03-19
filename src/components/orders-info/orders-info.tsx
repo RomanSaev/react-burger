@@ -1,4 +1,5 @@
 import { FC, useMemo } from "react";
+import { ORDER_NUMBERS_LIST_MAX_COUNT } from "../../constants";
 import { OrderStatusTypes, TOrderData } from "../../types";
 import { OrdersByStatus } from "./orders-by-status/orders-by-status";
 import styles from './orders-info.module.css'
@@ -20,12 +21,12 @@ export const OrdersInfo: FC<TOrdersInfoProps> = ({ orders, total, totalToday }) 
     }, [orders])
 
     const doneOrdersIds: number[] = useMemo(() => {
-        return doneOrders.map(order => order.number)
+        return doneOrders.map(order => order.number).slice(0, ORDER_NUMBERS_LIST_MAX_COUNT)
     }, [doneOrders]) 
 
     const pendingOrdersIds: number[] = useMemo(() => {
-        return pendingOrders.map(order => order.number)
-    }, [pendingOrders]) 
+        return pendingOrders.map(order => order.number).slice(0, ORDER_NUMBERS_LIST_MAX_COUNT)
+    }, [pendingOrders])
 
     return (
         <>
