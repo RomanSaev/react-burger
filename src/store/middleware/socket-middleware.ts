@@ -40,8 +40,7 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
                 socket = new WebSocket(wsUrl);
                 isConnected = true;
                 dispatch({ type: wsConnecting })
-            }
-            if (socket) {
+
                 socket.onopen = event => {
                     dispatch({ type: onOpen, payload: event });
                 };
@@ -88,7 +87,8 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
                         }, 3000)
                     }
                 };
-        
+            }
+            if (socket) {
                 //   if (type === wsSendMessage) {
                 //     socket.send(JSON.stringify({...payload}));
                 //   }
