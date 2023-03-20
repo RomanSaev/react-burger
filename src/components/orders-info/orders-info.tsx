@@ -11,21 +11,29 @@ type TOrdersInfoProps = {
     totalToday: number;
 }
 
+const getOrdersByStatus = (orders: TOrderData[], status: OrderStatusTypes) => {
+    return orders.filter(order => order.status === status)
+}
+
+const getOrderNumbersList = (orders: TOrderData[]) => {
+    return orders.map(order => order.number).slice(0, ORDER_NUMBERS_LIST_MAX_COUNT)
+}
+
 export const OrdersInfo: FC<TOrdersInfoProps> = ({ orders, total, totalToday }) => {
     const doneOrders: TOrderData[] = useMemo(() => {
-        return orders.filter(order => order.status === OrderStatusTypes.Done)
+        return getOrdersByStatus(orders, OrderStatusTypes.Done)
     }, [orders])
 
     const pendingOrders: TOrderData[] = useMemo(() => {
-        return orders.filter(order => order.status === OrderStatusTypes.Pending)
+        return getOrdersByStatus(orders, OrderStatusTypes.Pending)
     }, [orders])
 
     const doneOrdersIds: number[] = useMemo(() => {
-        return doneOrders.map(order => order.number).slice(0, ORDER_NUMBERS_LIST_MAX_COUNT)
+        return getOrderNumbersList(doneOrders)
     }, [doneOrders]) 
 
     const pendingOrdersIds: number[] = useMemo(() => {
-        return pendingOrders.map(order => order.number).slice(0, ORDER_NUMBERS_LIST_MAX_COUNT)
+        return getOrderNumbersList(pendingOrders)
     }, [pendingOrders])
 
     return (
