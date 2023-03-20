@@ -25,3 +25,4 @@ export const ORDER_PENDING_STATUS = 'Готовится';
 export const ORDER_CREATED_STATUS = 'Создан';
 
 export const ORDER_NUMBERS_LIST_MAX_COUNT = 10;
+export const VIEWED_INGREDIENTS_MAX_NUM = 6; //выводимое кол-во иконок ингредиентов в составке заказа в карточке заказа

@@ -15,7 +15,7 @@ const IngredientDetails: FC = () => {
     const { ingredients } = useAppSelector(ingredientsSelector);
     const dispatch = useAppDispatch();
     const { id: ingredientId } = useParams();
-    const ingredient: TIngredient | null | undefined = ingredients.length ? ingredients.find((el: TIngredient)=> el._id === ingredientId) : null;
+    const ingredient = ingredients.length ? ingredients.find((el: TIngredient)=> el._id === ingredientId) : null;
     
     useEffect(() => {
         if (ingredient) {

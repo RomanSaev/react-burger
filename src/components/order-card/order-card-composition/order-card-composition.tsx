@@ -1,5 +1,7 @@
 import { FC } from "react";
+import { VIEWED_INGREDIENTS_MAX_NUM } from "../../../constants";
 import { TIngredient } from "../../../types";
+import { getLastViewedIngredientCounter } from "../../../utils/functions-helper";
 import styles from './order-card-composition.module.css'
 
 type TOrderCardCompositionProps = {
@@ -7,16 +9,13 @@ type TOrderCardCompositionProps = {
 }
 
 export const OrderCardComposition: FC<TOrderCardCompositionProps> = ({ ingredients }) => {
-    const viewedIngredientsMaxNum = 4;
-
-    const viewedIngredients: TIngredient[] = [...ingredients].splice(0, viewedIngredientsMaxNum);
-    let lastViewedIngredientCounter = ingredients.length - viewedIngredientsMaxNum;
-    lastViewedIngredientCounter = lastViewedIngredientCounter < 0 ? 0 : lastViewedIngredientCounter;
+    const viewedIngredients: TIngredient[] = [...ingredients].splice(0, VIEWED_INGREDIENTS_MAX_NUM);
+    const lastViewedIngredientCounter = getLastViewedIngredientCounter(ingredients);
 
     return (
         <ul className={styles.compositionWrap}>
             {viewedIngredients.map((el, index) => {
-                const isLastWithCounter: boolean = (index + 1 === viewedIngredientsMaxNum && lastViewedIngredientCounter > 0);
+                const isLastWithCounter = (index + 1 === VIEWED_INGREDIENTS_MAX_NUM && lastViewedIngredientCounter > 0);
                 return (<li key={index} className={styles.compositionItem}>
                     <div className={styles.compositionItemInner}>
                         <img src={el.image_mobile} className={styles.compositionItemImg}/>

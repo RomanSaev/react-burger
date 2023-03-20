@@ -1,4 +1,4 @@
-import { ORDER_CREATED_STATUS, ORDER_DONE_STATUS, ORDER_PENDING_STATUS } from "../constants";
+import { ORDER_CREATED_STATUS, ORDER_DONE_STATUS, ORDER_PENDING_STATUS, VIEWED_INGREDIENTS_MAX_NUM } from "../constants";
 import { OrderStatusTypes, TConstructorIngredient, TIngredient, TOrderData } from "../types";
 
 export const getTotalBurgerPrice = (bun: TConstructorIngredient | TIngredient | null | undefined, fillingIngredients: (TConstructorIngredient | TIngredient)[]) => {
@@ -80,4 +80,9 @@ export const getOrderStatusStr = (order: TOrderData) => {
         return ORDER_DONE_STATUS;
     }
   }
+}
+
+export const getLastViewedIngredientCounter = (ingredients: TIngredient[]) => {
+  const delta = ingredients.length - VIEWED_INGREDIENTS_MAX_NUM;
+  return delta < 0 ? 0 : delta;
 }
