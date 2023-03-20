@@ -1,5 +1,18 @@
 import { Middleware } from "redux";
 import { RootState } from "../../types/store";
+import { refreshTokens } from "../../utils/react-burger-api";
+import { getCookie } from "../../utils/functions-helper";
+
+type TwsMessage = {
+    success: false
+    message: string
+} | {
+    success: true
+    orders: []
+    total: number
+    totalToday: number
+}
+
 
 export type TwsActionTypes = {
     wsConnect: string;
@@ -15,13 +28,15 @@ export type TwsActionTypes = {
 export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, RootState> => {
     return store => {
         let socket: WebSocket | null = null;
+        let wsUrl = '';
     
         return next => action => {
             const { dispatch, getState } = store;
             const { type, payload } = action;
             const { wsConnect, wsConnecting, wsDisconnect, onOpen, onClose, onError, onMessage } = wsActions;
             if (type === wsConnect) {
-                socket = new WebSocket(payload);
+                wsUrl = payload;
+                socket = new WebSocket(wsUrl);
                 dispatch({ type: wsConnecting })
             }
             if (socket) {
@@ -34,11 +49,31 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
                 };
         
                 socket.onmessage = event => {
-                    const { data } = event;
-                    const parsedData = JSON.parse(data);
-                    const { success, ...restParsedData } = parsedData;
-        
-                    dispatch({ type: onMessage, payload: restParsedData });
+                    const data: TwsMessage = JSON.parse(event.data);
+                    const { success, ...restData } = data;
+                    
+                    if (!success && data.message === "Invalid or missing token") {
+                        refreshTokens()
+                            .then(() => {
+                                const wsUrlAfterRefresh = new URL(wsUrl);
+                                const token = getCookie('accessToken');
+                                wsUrlAfterRefresh.searchParams.set(
+                                    'token',
+                                    token || ''
+                                );
+                                dispatch({ //диспатч экшена нового подключения
+                                    type: wsConnect,
+                                    payload: wsUrlAfterRefresh.href,
+                                });
+                            })
+                            .catch((err) => {
+                                dispatch({ type: onError, payload: err });
+                            });
+
+                        dispatch({ type: wsDisconnect });  //закрываем предыдущее подключение
+                    } else {
+                        dispatch({ type: onMessage, payload: restData });
+                    }
                 };
         
                 socket.onclose = event => {

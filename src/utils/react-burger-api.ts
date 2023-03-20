@@ -228,6 +228,18 @@ export const refreshTokenRequest = async (): Promise<TRefreshResponse> => {
     })
 }
 
+//метод для обновления токенов
+export const refreshTokens = async(): Promise<void> => {
+    const refreshData = await refreshTokenRequest();
+    let authToken;
+    authToken = refreshData.accessToken.split('Bearer ')[1];
+    if (authToken) {
+        saveTokens(authToken, refreshData.refreshToken)
+    } else {
+        throw 'refresh tokens error'
+    }
+}
+
 //запрос на выход из профиля
 export const logoutRequest = async (): Promise<TLogoutResponse> => {
     return await request<TLogoutResponse>(ENDPOINT_LOGOUT, {
