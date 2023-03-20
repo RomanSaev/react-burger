@@ -120,7 +120,7 @@ export const fetchWithRefresh = async <T>(url: RequestInfo, options: RequestInit
 
 //создание заказа
 export const makeOrder = async (ingredientIds: string[]): Promise<TMakeOrderResponse> => {
-    return await request<TMakeOrderResponse>(ENDPOINT_MAKE_ORDER, {
+    return await fetchWithRefresh<TMakeOrderResponse>(ENDPOINT_MAKE_ORDER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
