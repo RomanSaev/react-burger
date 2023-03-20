@@ -33,7 +33,7 @@ export interface IOrdersFeedConnectionSuccessAction {
 
 export interface IOrdersFeedConnectionClosedAction {
     readonly type: typeof ORDERS_FEED_CONNECTION_CLOSED;
-    readonly payload: Event;
+    readonly payload?: Event;
 }
 
 export interface IOrdersFeedConnectionErrorAction {

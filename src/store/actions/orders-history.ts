@@ -33,7 +33,7 @@ export interface IOrdersHistoryConnectionSuccessAction {
 
 export interface IOrdersHistoryConnectionClosedAction {
     readonly type: typeof ORDERS_HISTORY_CONNECTION_CLOSED;
-    readonly payload: Event;
+    readonly payload?: Event;
 }
 
 export interface IOrdersHistoryConnectionErrorAction {

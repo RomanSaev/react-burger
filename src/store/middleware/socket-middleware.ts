@@ -13,7 +13,6 @@ type TwsMessage = {
     totalToday: number
 }
 
-
 export type TwsActionTypes = {
     wsConnect: string;
     wsDisconnect: string;
@@ -29,6 +28,8 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
     return store => {
         let socket: WebSocket | null = null;
         let wsUrl = '';
+        let isConnected = false;
+        let reconnectTimer = 0;
     
         return next => action => {
             const { dispatch, getState } = store;
@@ -37,6 +38,7 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
             if (type === wsConnect) {
                 wsUrl = payload;
                 socket = new WebSocket(wsUrl);
+                isConnected = true;
                 dispatch({ type: wsConnecting })
             }
             if (socket) {
@@ -51,7 +53,7 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
                 socket.onmessage = event => {
                     const data: TwsMessage = JSON.parse(event.data);
                     const { success, ...restData } = data;
-                    
+
                     if (!success && data.message === "Invalid or missing token") {
                         refreshTokens()
                             .then(() => {
@@ -78,6 +80,13 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
         
                 socket.onclose = event => {
                     dispatch({ type: onClose, payload: event });
+
+                    if (isConnected) { //прервано внешним фактором
+                        dispatch({ type: wsConnecting }); //начинаем реконнект
+                        reconnectTimer = window.setTimeout(() => {
+                          dispatch({ type: wsConnect, payload: wsUrl });
+                        }, 3000)
+                    }
                 };
         
                 //   if (type === wsSendMessage) {
@@ -85,8 +94,12 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
                 //   }
 
                 if (type === wsDisconnect) {
+                    isConnected = false;
+                    clearTimeout(reconnectTimer);
+                    reconnectTimer = 0;
                     socket.close();
                     socket = null;
+                    dispatch({ type: onClose });
                 }
             }
     
