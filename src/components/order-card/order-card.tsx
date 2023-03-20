@@ -19,12 +19,15 @@ export const OrderCard: FC<TOrderCardProps> = ({ order, withStatus, itemUrl }) =
     const { ingredients } = useAppSelector(ingredientsSelector);
     const location: TUseLocation = useLocation();
 
-    const orderIngredients: TIngredient[] = [];
-
-    order.ingredients.forEach(id => {
-        const ingredient:TIngredient | undefined = ingredients.find(el => el._id === id);
-        ingredient && orderIngredients.push({ ...ingredient });
-    });
+    const orderIngredients: TIngredient[] = useMemo(() => {
+        return order.ingredients.reduce((prev: TIngredient[], current) => {
+            const ingredient = ingredients.find(el => el._id === current);
+            if (ingredient) {
+                return [...prev, ingredient ];
+            }
+            return prev;
+        }, [])
+    }, [order, ingredients]);
 
     const totalPrice = useMemo(()=> {
         const bun = orderIngredients.find(el => el.type === 'bun')
