@@ -21,9 +21,9 @@ const TotalPanel: FC<TotalPanelProps> = ({ price }) => {
     const location: TUseLocation = useLocation();
 
     const selectedIngredientsIds = useMemo (() => {
-        const ingredientIds: string[] = fillingIngredients.map((el: TIngredient) => el._id);
+        let ingredientIds: string[] = fillingIngredients.map((el: TIngredient) => el._id);
         if (bun) {
-            ingredientIds.push(bun._id)
+            ingredientIds = [bun._id, ...ingredientIds, bun._id];
         }
         return ingredientIds;
     }, [bun, fillingIngredients])
