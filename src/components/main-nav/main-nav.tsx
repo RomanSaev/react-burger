@@ -12,7 +12,7 @@ const MainNav: FC = () => {
         },
         {
             iconType: MainNavIconTypes.List,
-            href: '/orders-feed',
+            href: '/feed',
             txt: 'Лента заказов',
         }
     ]

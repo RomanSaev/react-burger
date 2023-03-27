@@ -1,5 +1,5 @@
-import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
-import { TIngredient, TUserUpdateData } from '../types';
+import { BURGER_API_URL, ENDPOINT_INGREDIENTS, ENDPOINT_LOGIN, ENDPOINT_LOGOUT, ENDPOINT_MAKE_ORDER, ENDPOINT_ORDER, ENDPOINT_PASSWORD_FORGOT, ENDPOINT_PASSWORD_RESET, ENDPOINT_REGISTER, ENDPOINT_TOKEN_REFRESH, ENDPOINT_USER } from '../constants'
+import { TIngredient, TLoginForm, TOrderData, TRegisterForm, TResetPasswordForm, TUserUpdateData } from '../types';
 import { getCookie, saveTokens } from './functions-helper';
 
 type TServerResponse<T> = {
@@ -10,7 +10,7 @@ type TIngredientsResponse = TServerResponse<{
     data: TIngredient[]
 }>
 
-type TOrderResponse = TServerResponse<{
+type TMakeOrderResponse = TServerResponse<{
     name: string;
     order: {
         number: number;
@@ -59,26 +59,14 @@ type TLogoutResponse = TServerResponse<{
     message: string
 }>
 
+type TGetOrderResponse = TServerResponse<{
+    orders: TOrderData[];
+}>
+
 type TErrorResponse = TServerResponse<{
     message: string
 }>
 
-
-type TResetPasswordForm = {
-    password: string;
-    emailCode: string;
-}
-
-type TRegisterForm = {
-    password: string;
-    email: string;
-    name: string;
-}
-
-type TLoginForm = {
-    password: string;
-    email: string;
-}
 
 const checkReponse = async <T>(res: Response): Promise<T> => {
     if (!res.ok) throw `Ошибка ${res.status}`
@@ -131,11 +119,12 @@ export const fetchWithRefresh = async <T>(url: RequestInfo, options: RequestInit
   };
 
 //создание заказа
-export const makeOrder = async (ingredientIds: string[]): Promise<TOrderResponse> => {
-    return await request<TOrderResponse>(ENDPOINT_MAKE_ORDER, {
+export const makeOrder = async (ingredientIds: string[]): Promise<TMakeOrderResponse> => {
+    return await fetchWithRefresh<TMakeOrderResponse>(ENDPOINT_MAKE_ORDER, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            Authorization: 'Bearer ' + getCookie('accessToken')
         },
         body: JSON.stringify({
             ingredients: ingredientIds
@@ -239,6 +228,18 @@ export const refreshTokenRequest = async (): Promise<TRefreshResponse> => {
     })
 }
 
+//метод для обновления токенов
+export const refreshTokens = async(): Promise<void> => {
+    const refreshData = await refreshTokenRequest();
+    let authToken;
+    authToken = refreshData.accessToken.split('Bearer ')[1];
+    if (authToken) {
+        saveTokens(authToken, refreshData.refreshToken)
+    } else {
+        throw 'refresh tokens error'
+    }
+}
+
 //запрос на выход из профиля
 export const logoutRequest = async (): Promise<TLogoutResponse> => {
     return await request<TLogoutResponse>(ENDPOINT_LOGOUT, {
@@ -249,5 +250,15 @@ export const logoutRequest = async (): Promise<TLogoutResponse> => {
         body: JSON.stringify({
             'token': localStorage.getItem('refreshToken')
         })
+    })
+}
+
+//запрос данных о заказе
+export const getOrderRequest = async (orderNumber: number): Promise<TGetOrderResponse> => {
+    return await request<TGetOrderResponse>(`${ENDPOINT_ORDER}/${orderNumber}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
     })
 }

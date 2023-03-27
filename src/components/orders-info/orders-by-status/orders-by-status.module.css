@@ -1,0 +1,45 @@
+.listWrap {
+
+}
+
+.title {
+    display: inline-block;
+    margin-bottom: 24px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #F2F2F3;
+}
+
+.numbersList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 152px;
+}
+
+.numbersList > li {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    display: flex;
+    height: 24px;
+    align-items: center;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    font-family: 'Iceland', Arial, sans-serif;
+}
+
+.pendingList > li {
+    color: #F2F2F3;    
+}
+
+.doneList > li {
+    color: #00CCCC;
+}

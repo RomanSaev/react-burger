@@ -1,30 +1,29 @@
 import { FC, useMemo } from 'react'
 import styles from './total-panel.module.css'
 import { Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux';
 import { makeOrderRequest } from '../../store/actions/order';
 import { authSelector, burgerConstructorSelector, orderSelector } from '../../store/selectors';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RESET_CONSTRUCTOR_ITEMS } from '../../store/actions/burger-constructor';
 import { TIngredient, TUseLocation } from '../../types';
-import { Dispatch } from 'redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { RESET_CONSTRUCTOR_ITEMS } from '../../store/actions/actionTypes';
 
 type TotalPanelProps = {
     price: number;
 }
 
 const TotalPanel: FC<TotalPanelProps> = ({ price }) => {
-    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
-    const { orderRequest, orderFailed } = useSelector(orderSelector)
-    const { user } = useSelector(authSelector)
+    const { bun, fillingIngredients } = useAppSelector(burgerConstructorSelector);
+    const { orderRequest, orderFailed } = useAppSelector(orderSelector)
+    const { user } = useAppSelector(authSelector)
     const navigate = useNavigate();
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useAppDispatch();
     const location: TUseLocation = useLocation();
 
     const selectedIngredientsIds = useMemo (() => {
-        const ingredientIds: string[] = fillingIngredients.map((el: TIngredient) => el._id);
+        let ingredientIds: string[] = fillingIngredients.map((el: TIngredient) => el._id);
         if (bun) {
-            ingredientIds.push(bun._id)
+            ingredientIds = [bun._id, ...ingredientIds, bun._id];
         }
         return ingredientIds;
     }, [bun, fillingIngredients])
@@ -33,9 +32,8 @@ const TotalPanel: FC<TotalPanelProps> = ({ price }) => {
         if (!user.isLogged) {
             navigate('/login')
         } else {
-            //dispatch(makeOrderRequest(selectedIngredientsIds))
-            const orderRequest: any = dispatch(makeOrderRequest(selectedIngredientsIds));
-            orderRequest.then(() => {
+            dispatch(makeOrderRequest(selectedIngredientsIds))
+            .then(() => {
                 //открываем попап только в случае успешного создания заказа
                 navigate('/order', { state: { background: location } })
                 dispatch({ type: RESET_CONSTRUCTOR_ITEMS })

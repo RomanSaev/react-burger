@@ -4,17 +4,16 @@ import ConstructorItemFixed from '../constructor-item-fixed/constructor-item-fix
 import ConstructorItem from '../constructor-item/constructor-item'
 import TotalPanel from '../total-panel/total-panel'
 import ConstructorItemEmpty from '../constructor-item-empty/constructor-item-empty'
-import { useDispatch, useSelector } from 'react-redux'
 import { addToConstructor } from '../../store/actions/burger-constructor'
 import { useDrop } from 'react-dnd'
 import { getTotalBurgerPrice } from '../../utils/functions-helper'
 import { burgerConstructorSelector } from '../../store/selectors'
-import { Dispatch } from 'redux'
 import { ConstructorItemEmptyTypes, ConstructorItemFixedTypes, TConstructorIngredient, TIngredient } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../hooks/store'
 
 const BurgerConstructor: FC = () => {
-    const { bun, fillingIngredients } = useSelector(burgerConstructorSelector);
-    const dispatch: Dispatch<any> = useDispatch();
+    const { bun, fillingIngredients } = useAppSelector(burgerConstructorSelector);
+    const dispatch = useAppDispatch();
 
     const [emptyBurgerHoverType, setEmptyBurgerHoverType] = useState<string>('');//храним подсветку блоков пустого бургера в локальном состоянии
 

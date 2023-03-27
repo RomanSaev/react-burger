@@ -1,8 +1,7 @@
 import classNames from "classnames"
 import { FC, SyntheticEvent } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
-import { Dispatch } from "redux"
+import { useAppDispatch, useAppSelector } from "../../hooks/store"
 import { fetchLogout } from "../../store/actions/auth"
 import { authSelector } from "../../store/selectors"
 import { FormInfoTypes } from "../../types"
@@ -10,16 +9,16 @@ import { FormInfo } from "../form-info/form-info"
 import styles from './profile-sidebar.module.css'
 
 export const ProfileSidebar: FC = () => {
-    const dispatch: Dispatch<any> = useDispatch()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { logoutRequest, logoutFailed } = useSelector(authSelector)
+    const { logoutRequest, logoutFailed } = useAppSelector(authSelector)
 
     const onLogoutClick = (e: SyntheticEvent) => {
         e.preventDefault()
 
         if (logoutRequest) return;
 
-        (dispatch(fetchLogout()) as any)
+        dispatch(fetchLogout())
             .then(() => {
                 navigate('/login')
             })

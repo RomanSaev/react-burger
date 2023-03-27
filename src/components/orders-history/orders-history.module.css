@@ -1,0 +1,27 @@
+.ordersHistory {
+    max-height: 716px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.ordersHistory::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ordersHistory::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+.ordersHistory::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+
+.ordersHistory::-webkit-scrollbar-thumb:hover {
+    border: 3px solid #9696c1
+}
+
+.ordersHistory > div:first-child .categoryName{
+    margin-top: 0;
+}
+  

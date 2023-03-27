@@ -1,9 +1,8 @@
 import { Button, EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Dispatch } from "redux";
 import { FormInfo } from "../components/form-info/form-info";
+import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { fetchForgotPassword } from "../store/actions/reset-password";
 import { resetPasswordSelector } from "../store/selectors";
 import { FormInfoTypes } from "../types";
@@ -11,9 +10,9 @@ import styles from './forgot-password.module.css'
 
 export const ForgotPasswordPage: FC = () => {
     const [email, setEmail] = useState<string>('');
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { forgotPasswordRequest, forgotPasswordFailed } = useSelector(resetPasswordSelector)
+    const { forgotPasswordRequest, forgotPasswordFailed } = useAppSelector(resetPasswordSelector)
 
     const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
@@ -26,7 +25,7 @@ export const ForgotPasswordPage: FC = () => {
     const formSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        (dispatch(fetchForgotPassword(email)) as any)
+        dispatch(fetchForgotPassword(email))
             .then(() => { 
                 navigateToResetPswrd()
             })

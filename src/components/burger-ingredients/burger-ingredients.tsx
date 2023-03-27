@@ -2,12 +2,11 @@ import react, { FC, RefObject, useEffect, useMemo, useRef } from 'react'
 import styles from './burger-ingredients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
-import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
-import { SET_BROWSED_CATEGORY } from '../../store/actions/ingredient-detail';
 import { burgerConstructorSelector, ingredientsSelector, ingredientDetailSelector } from '../../store/selectors';
-import { Dispatch } from 'redux';
 import { TIngredient } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { SET_BROWSED_CATEGORY } from '../../store/actions/actionTypes';
 
 type TUseInViewParams = {
     threshold: number;
@@ -25,10 +24,10 @@ type TCounters = {
 };
 
 const BurgerIngredients: FC = () => {
-    const { ingredients } = useSelector(ingredientsSelector);
-    const burgerConstructor = useSelector(burgerConstructorSelector);
-    const { browsedCategory } = useSelector(ingredientDetailSelector)
-    const dispatch: Dispatch<any> = useDispatch();
+    const { ingredients } = useAppSelector(ingredientsSelector);
+    const burgerConstructor = useAppSelector(burgerConstructorSelector);
+    const { browsedCategory } = useAppSelector(ingredientDetailSelector)
+    const dispatch = useAppDispatch();
 
     const useInViewParams: TUseInViewParams = { threshold: 0.2 }; //для более плавной смены активной просматриваемой категории
     const [ ref1, inView1, entry1 ] = useInView(useInViewParams);

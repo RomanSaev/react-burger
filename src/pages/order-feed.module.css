@@ -1,0 +1,41 @@
+.mainHeader {
+    composes: mainHeader from './burger-constructor.module.css'
+}
+
+.mainContent {
+    composes: mainContent from './burger-constructor.module.css'
+}
+
+.sectionsWrap {
+    composes: sectionsWrap from './burger-constructor.module.css';
+    gap: 60px;
+}
+
+/* .sectionsWrap>section {
+    width: 50%;
+} */
+
+.ordersList {
+    max-height: 716px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    position: relative;
+    padding-right: 8px;
+}
+
+.ordersList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ordersList::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+.ordersList::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+
+.ordersList::-webkit-scrollbar-thumb:hover {
+    border: 3px solid #9696c1
+}

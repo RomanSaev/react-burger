@@ -1,7 +1,6 @@
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { updateUser } from '../../store/actions/auth';
 import { authSelector } from '../../store/selectors';
 import { FormInfoTypes, TUserUpdateData } from '../../types';
@@ -14,13 +13,13 @@ export const ProfileSettings: FC = () => {
         patchUserRequest, 
         patchUserSuccess, 
         patchUserFailed,
-    } = useSelector(authSelector);
+    } = useAppSelector(authSelector);
 
     const [name, setName] = useState<string>(user.name);
     const [email, setEmail] = useState<string>(user.email);
     const [password, setPassword] = useState<string>(user.password);
     const [dataChanged, setDataChanged] = useState<boolean>(false)
-    const dispatch: Dispatch<any> = useDispatch();
+    const dispatch = useAppDispatch();
 
     const checkDataChange = () => {
         const isChanged: boolean = name !== user.name 
@@ -57,7 +56,7 @@ export const ProfileSettings: FC = () => {
         if (email !== user.email) patchData.email = email;
         if (password !== '') patchData.password = password;
 
-        (dispatch(updateUser(patchData)) as any)
+        dispatch(updateUser(patchData))
             .then(() => {
                 setDataChanged(false);
             })
@@ -76,6 +75,7 @@ export const ProfileSettings: FC = () => {
     const formSuccessDefaultText = 'Данные успешно изменены';
 
     return (
+        <div className={'pt-20'}>
         <form className={styles.profileForm} onSubmit={submitForm}>
 
             {patchUserFailed && <FormInfo text={formErrorDefaultText} type={FormInfoTypes.Error}/>}
@@ -137,5 +137,6 @@ export const ProfileSettings: FC = () => {
             </div>
 
         </form>
+        </div>
     );
 }
