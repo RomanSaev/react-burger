@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.1",
+    "jest": "^27.5.1",
     "redux-devtools-extension": "^2.13.9"
   }
 }
