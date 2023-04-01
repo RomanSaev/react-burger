@@ -37,7 +37,7 @@ const BurgerConstructor: FC = () => {
      }, [bun, fillingIngredients]);
 
     return (
-        <section className={'pl-4'} ref={dropTarget}>
+        <section className={'pl-4'} ref={dropTarget} data-testid='burger-constructor'>
             {bun
                 ? <ConstructorItemFixed ingredientData={bun} type={ConstructorItemFixedTypes.Top}/>
                 : <ConstructorItemEmpty
