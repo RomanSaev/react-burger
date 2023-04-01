@@ -26,3 +26,10 @@ export const ORDER_CREATED_STATUS = 'Создан';
 
 export const ORDER_NUMBERS_LIST_MAX_COUNT = 10;
 export const VIEWED_INGREDIENTS_MAX_NUM = 6; //выводимое кол-во иконок ингредиентов в составке заказа в карточке заказа
+
+//Testing
+export const INGREDIENT_POPUP_COMMON_TEXT = 'Детали ингредиента'
+export const CREATED_ORDER_POPUP_COMMON_TEXT = 'идентификатор заказа'
+export const INGREDIENT_NAME_1 = 'Ингредиент 1'
+export const INGREDIENT_NAME_2 = 'Ингредиент 2'
+export const INGREDIENT_NAME_3 = 'Ингредиент 3'
