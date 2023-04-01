@@ -47,7 +47,7 @@ export type TAuthState = {
     },
 }
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
     registerRequest: false,
     registerFailed: false,
 

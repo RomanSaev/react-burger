@@ -1,5 +1,6 @@
 import { INGREDIENT_DETAIL_SET, SET_BROWSED_CATEGORY } from "../actions/actionTypes"
 import { ingredientDetailReducer } from "./ingredient-detail"
+import { initialState } from './ingredient-detail'
 
 describe('ingredient-detail reducer', () => {
 
@@ -35,17 +36,11 @@ describe('ingredient-detail reducer', () => {
     ]
 
     it('should return initial state', () => {
-        expect(ingredientDetailReducer(undefined, {})).toEqual({
-            selectedIngredient: null,
-            browsedCategory: 'bun',
-        })
+        expect(ingredientDetailReducer(undefined, {})).toEqual(initialState)
     })
 
     it('should handle SET_BROWSED_CATEGORY', () => {
-        expect(ingredientDetailReducer({
-            selectedIngredient: null,
-            browsedCategory: 'bun',
-        }, {
+        expect(ingredientDetailReducer(initialState, {
             type: SET_BROWSED_CATEGORY,
             payload: 'sauce'
         })).toEqual({
@@ -67,10 +62,7 @@ describe('ingredient-detail reducer', () => {
     })
 
     it('should handle INGREDIENT_DETAIL_SET', () => {
-        expect(ingredientDetailReducer({
-            selectedIngredient: null,
-            browsedCategory: 'bun'
-        }, {
+        expect(ingredientDetailReducer(initialState, {
             type: INGREDIENT_DETAIL_SET,
             payload: testIngredients[0]
         })).toEqual({

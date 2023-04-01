@@ -1,13 +1,8 @@
 import { orderReducer } from "./order"
 import { MAKE_ORDER_REQUEST, MAKE_ORDER_SUCCESS, MAKE_ORDER_FAILED} from '../actions/actionTypes'
+import { initialState } from "./order"
 
 describe('order reducer', () => {
-    const initialState = {
-        order: null,
-        orderRequest: false,
-        orderFailed: false,
-    }
-
     it('should return initial state', () => {
         expect(orderReducer(undefined, {})).toEqual(initialState)
     })

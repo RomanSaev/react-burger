@@ -7,16 +7,9 @@ import {
     RESET_PASSWORD_REQUEST,
     RESET_PASSWORD_SUCCESS 
 } from "../actions/actionTypes"
+import { initialState } from "./reset-password";
 
 describe('reset-password reducer', () => {
-    const initialState = {
-        forgotPasswordRequest: false,
-        forgotPasswordFailed: false,
-
-        resetPasswordRequest: false,
-        resetPasswordFailed: false,
-    }
-
     it('should return initial state', () => {
         expect(resetPasswordReducer(undefined, {})).toEqual(initialState)
     })

@@ -1,5 +1,6 @@
 import { viewOrderReducer } from "./view-order";
 import { GET_ORDER_FAILED, GET_ORDER_REQUEST, GET_ORDER_SUCCESS } from "../actions/actionTypes"
+import { initialState } from "./view-order";
 
 describe('view-order reducer', () => {
     const testOrder = {
@@ -10,12 +11,6 @@ describe('view-order reducer', () => {
         number: 123456,
         createdAt: 'testdate',
         updatedAt: 'testdate',
-    }
-
-    const initialState = {
-        order: null,
-        getOrderRequest: false,
-        getOrderFailed: false,
     }
 
     it('should handle GET_ORDER_REQUEST', () => {

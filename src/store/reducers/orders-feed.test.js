@@ -1,5 +1,6 @@
 import { ordersFeedReducer } from "./orders-feed";
 import { ORDERS_FEED_CONNECTION_CLOSED, ORDERS_FEED_CONNECTION_ERROR, ORDERS_FEED_CONNECTION_SUCCESS, ORDERS_FEED_GET_MESSAGE } from "../actions/actionTypes";
+import { initialState } from "./orders-feed";
 
 describe('orders-feed reducer', () => {
     const testOrdersData = {
@@ -25,14 +26,6 @@ describe('orders-feed reducer', () => {
         ],
         total: 434,
         totalToday: 12,
-    }
-
-    const initialState = {
-        wsConnected: false,
-        orders: null,
-        total: 0,
-        totalToday: 0,
-        error: null,
     }
 
     it('should return initial state', () => {

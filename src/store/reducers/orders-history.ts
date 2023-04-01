@@ -10,7 +10,7 @@ type TOrdersHistoryState = {
     error?: Event | null;
 };
 
-const initialState: TOrdersHistoryState = {
+export const initialState: TOrdersHistoryState = {
     wsConnected: false,
     orders: null,
     total: 0,

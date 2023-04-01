@@ -1,38 +1,12 @@
 import { authReducer } from "./auth";
 import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_SUCCESS, GET_USER_FAILED, USER_SET, USER_PATCH_REQUEST, USER_PATCH_SUCCESS, USER_PATCH_FAILED, USER_UPDATE, AUTH_CHECKED } from "../actions/actionTypes";
+import { initialState } from "./auth";
 
 describe('auth reducer', () => {
     const testUser = {
         name: 'Margo',
         email: 'margo123123123@mail.ru',
         password: 'test'
-    }
-
-    const initialState = {
-        registerRequest: false,
-        registerFailed: false,
-
-        loginRequest: false,
-        loginFailed: false,
-    
-        logoutRequest: false,
-        logoutFailed: false, 
-    
-        getUserRequest: false,
-        getUserFailed: false,
-    
-        patchUserRequest: false,
-        patchUserSuccess: false,
-        patchUserFailed: false,
-    
-        authChecked: false,
-    
-        user: {
-            name: '',
-            email: '',
-            password: '',
-            isLogged: false
-        },
     }
 
     it('should return initial state', () => {

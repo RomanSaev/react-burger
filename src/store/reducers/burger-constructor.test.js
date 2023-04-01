@@ -1,5 +1,6 @@
 import { burgerConstructorReducer } from './burger-constructor'
 import { ADD_CONSTRUCTOR_ITEM, MOVE_CONSTRUCTOR_ITEM, REMOVE_CONSTRUCTOR_ITEM, RESET_CONSTRUCTOR_ITEMS } from "../actions/actionTypes";
+import { initialState } from './burger-constructor'
 
 describe('burger-constructor reducer', () => {
     const testIngredients = [
@@ -49,11 +50,6 @@ describe('burger-constructor reducer', () => {
             uuid: 'arrrrbbbgg'
         }
     ]
-
-    const initialState = {
-        bun: null,
-        fillingIngredients: [],
-    }
 
     it('should return initial state', () => {
         expect(burgerConstructorReducer(undefined, {})).toEqual(initialState)

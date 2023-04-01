@@ -1,5 +1,6 @@
 import { ordersHistoryReducer } from "./orders-history";
 import { ORDERS_HISTORY_CONNECTION_CLOSED, ORDERS_HISTORY_CONNECTION_ERROR, ORDERS_HISTORY_CONNECTION_SUCCESS, ORDERS_HISTORY_GET_MESSAGE } from "../actions/actionTypes";
+import { initialState } from "./orders-history";
 
 describe('orders-history reducer', () => {
     const testOrdersData = {
@@ -25,14 +26,6 @@ describe('orders-history reducer', () => {
         ],
         total: 434,
         totalToday: 12,
-    }
-
-    const initialState = {
-        wsConnected: false,
-        orders: null,
-        total: 0,
-        totalToday: 0,
-        error: null,
     }
 
     it('should return initial state', () => {

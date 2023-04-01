@@ -1,5 +1,6 @@
 import {ingredientsReducer} from './ingredients'
 import { GET_INGREDIENTS_FAILED, GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS } from "../actions/actionTypes"
+import { initialState } from './ingredients'
 
 describe('ingredients reducer', () => {
     const testIngredients = [
@@ -32,12 +33,6 @@ describe('ingredients reducer', () => {
             __v: 15,
         }
     ]
-
-    const initialState = {
-        ingredients: [],
-        ingredientsRequest: false,
-        ingredientsFailed: false,
-    }
 
     it('should return initial state', () => {
         expect(ingredientsReducer(undefined, {})).toEqual(initialState)
