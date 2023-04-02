@@ -52,6 +52,7 @@ describe('main page works correctly', function() {
 
       cy.contains('Оформить заказ').click();
       cy.contains(CREATED_ORDER_POPUP_COMMON_TEXT);
+      cy.wait(500);
       cy.get(modalOverlaySelector).click({force: true});
       cy.contains(CREATED_ORDER_POPUP_COMMON_TEXT).should('not.exist');
     });
