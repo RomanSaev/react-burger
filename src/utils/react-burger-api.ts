@@ -69,7 +69,12 @@ type TErrorResponse = TServerResponse<{
 
 
 const checkReponse = async <T>(res: Response): Promise<T> => {
-    if (!res.ok) throw `Ошибка ${res.status}`
+    if (!res.ok) {
+        if (res.status === 403) { 
+            throw await res.json()
+        }
+        throw `Ошибка ${res.status}`
+    }
     return await res.json()
 };
 

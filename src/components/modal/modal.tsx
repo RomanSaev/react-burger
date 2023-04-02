@@ -39,7 +39,7 @@ const Modal: FC<PropsWithChildren<TModalProps>> = ({ title = '', onClose, numeri
                         <div className={titleCls}>
                             {title}
                         </div>
-                        <div className={styles.closeIcon}>
+                        <div className={styles.closeIcon} data-testid='close-icon-wrap'>
                             <CloseIcon type="primary" onClick={onClose}/>
                         </div>
                     </div>

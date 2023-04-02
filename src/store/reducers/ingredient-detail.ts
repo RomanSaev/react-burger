@@ -7,7 +7,7 @@ export type TIngredientDetailState = {
     browsedCategory: string;
 }
 
-const initialState: TIngredientDetailState = {
+export const initialState: TIngredientDetailState = {
     selectedIngredient: null,
     browsedCategory: 'bun', //текущая просматриваемая категория в BurgerIngredients (активный таб)
 }

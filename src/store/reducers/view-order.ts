@@ -8,7 +8,7 @@ export type TViewOrderState = {
     getOrderFailed: boolean,
 }
 
-const initialState: TViewOrderState = {
+export const initialState: TViewOrderState = {
     order: null,
     
     getOrderRequest: false,

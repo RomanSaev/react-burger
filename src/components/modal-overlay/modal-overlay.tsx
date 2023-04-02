@@ -10,6 +10,7 @@ const ModalOverlay: FC<TModalOverlayProps> = ({ closeModal }) => {
         <div 
             className={styles.overlay}
             onClick={closeModal}
+            data-testid='modal-overlay'
         ></div>
     )
 }
